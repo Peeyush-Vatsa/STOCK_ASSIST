@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 # Create your models here.
 
+#Creating a stock watchlist model with minimal details
 class watchlist_stocks_current(models.Model):
     stock_symbol = models.CharField(max_length=50, default='NULL_STOCK')
     company = models.CharField(max_length=200, default='NULL_STOCK')

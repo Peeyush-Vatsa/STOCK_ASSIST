@@ -1,0 +1,55 @@
+<html lang="en-gb">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="description" content="This website is about helping you manage your portfolio">
+        <meta name="vviewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <title>Stock Assistant</title>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-sm bg-light fixed-top">
+            <div class="navbar-nav w-100">
+                <a class="navbar-brand px-3 py-2 flex-fill" href="#"><h2>Stock Assistant</h2></a>
+                <span class="nav-item px-3 py-2 flex-fill">
+                    <button type="button" class="btn btn-primary float-right btn-lg" data-toggle="modal" data-target="#LoginForm">Login</button>
+                </span>
+            </div>
+        </nav>
+
+        <div class="modal fade" id="LoginForm">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-title">
+                            <h3 class="text-primary">Login</h3>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="username">Username: </label>
+                                <input type="text" class="form-control" name="username" id="username" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="pwd">Password: </label>
+                                <input type="password" class="form-control" name="pwd" id="pwd" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Log in</button>
+                        </form>
+                        <h4 class="text-center">or</h4>
+                        <hr>
+                        <a href="{% url 'stockassist:signup'%}" class="btn btn-danger btn-block">Sign Up</a>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-warning float-right">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+       
+    </body>
+</html>
