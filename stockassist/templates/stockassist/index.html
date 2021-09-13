@@ -7,7 +7,6 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <!--<script src="https://kit.fontawsome.com/6d65510908.js" crossorigin="anonymous"></script>-->
         <script src="{%static 'stockassist/UI.js'%}"></script>
@@ -15,7 +14,7 @@
         <title>Stock Assistant</title>
     </head>
     <body>
-        <nav class="navbar navbar-expand-sm bg-light fixed-top">
+        <nav class="navbar navbar-expand-sm bg-light">
             <div class="navbar-nav w-100">
                 <a class="navbar-brand px-3 py-2 flex-fill" href="#"><h2>Stock Assistant</h2></a>
                 {%if user.is_authenticated%}
@@ -31,12 +30,18 @@
                     </span>
                 {%else%}
                     <span class="nav-item px-3 py-2 flex-fill">
-                        <button type="button" class="btn btn-primary float-right btn-lg" data-toggle="modal" data-target="#LoginForm">Login</button>
+                        <button type="button" class="btn btn-primary float-right btn-lg" data-toggle="modal" data-target="#LoginForm"">Login</button>
                     </span>
                 {%endif%}
             </div>
         </nav>
-
+        <div class="container-fluid">
+            {%if notauthenticated%}
+                <div class="alert alert-danger alert-dismissible fade show">
+                    <strong>User credentials not valid. Please try again</strong>
+                </div>
+            {%endif%}
+        </div>
         <div class="modal fade" id="LoginForm">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -61,10 +66,10 @@
                                     </button>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary btn-block">Log in</button>
+                            <button type="submit" class="btn btn-primary btn-block" id="Login_button" onsubmit="login()">Log in</button>
                         </form>
-                        <h4 class="text-center">or</h4>
                         <hr>
+                        <h4 class="text-center">or</h4>
                         <a href="{% url 'stockassist:signup'%}" class="btn btn-danger btn-block">Sign Up</a>
                     </div>
                     <div class="modal-footer">

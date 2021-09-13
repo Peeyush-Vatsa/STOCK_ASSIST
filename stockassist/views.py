@@ -1,3 +1,4 @@
+from typing import ContextManager
 from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
 import django.contrib.auth as auth
@@ -5,13 +6,11 @@ import django.contrib.auth as auth
 # Create your views here.
 def homepage(request):
     if request.method == 'GET':
-        context = {}
-        return render(request, 'stockassist/index.html', context=context)
+        return render(request, 'stockassist/index.html')
 
 def signup(request):
     if request.method == 'GET':
-        context = {}
-        return render(request, 'stockassist/signup.html', context)
+        return render(request, 'stockassist/signup.html')
     elif request.method == 'POST':
         username = request.POST['username']
         password = request.POST['pwd']
@@ -29,7 +28,13 @@ def signup(request):
             auth.login(request, user)
             return redirect('stockassist:homepage')
         else:
-            return render(request, 'stockassist/index.html')
+            context = {
+                'userExists': True,
+                'fname': firstName,
+                'lname': lastName,
+                'emailid': emailid
+            }
+            return render(request, 'stockassist/signup.html', context=context)
     else:
         return render(request, 'stockassist/index.html')
 
@@ -37,12 +42,19 @@ def login_req(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['pwd']
+        print("Preparing to authenticate user...")
         user = auth.authenticate(username=username, password=password)
         if user is not None:
+            print("User is authenticated"+'\n'+"Logging user in...")
             auth.login(request, user)
             return redirect('stockassist:homepage')
         else:
-            return render(request, 'stockassist/index.html')
+            print("User authentication failed")
+            print("Redirecting to homepage...")
+            context = {
+                'notauthenticated': True
+            }
+            return render(request, 'stockassist/index.html', context)
     else:
         return render(request, 'stockassist/index.html')
 

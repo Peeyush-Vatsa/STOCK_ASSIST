@@ -10,7 +10,7 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <script src="{%static 'stockassist/UI.js'%}"></script>
-        <title>Stock Assistant</title>
+        <title>Sign Up</title>
     </head>
     <body>
         <nav class="navbar navbar-expand-sm bg-light justify-content-center">
@@ -27,18 +27,36 @@
                     <label for="username">Username: </label>
                     <input type="text" placeholder="Enter username" class="form-control" name="username" id="username" required>
                 </div>
-                <div class="form-group">
-                    <label for="fname">First Name: </label>
-                    <input type="text" class="form-control" name="fname" id="fname" placeholder="Enter first name" required>
-                </div>
-                <div class="form-group">
-                    <label for="lname">Last Name: </label>
-                    <input type="text" class="form-control" name="lname" id="lname" placeholder="Enter last name" required>
-                </div>
-                <div class="form-group">
-                    <label for="emailid">Email ID: </label>
-                    <input type="email" class="form-control" name="emailid" id="emailid" placeholder="Enter email id" required>
-                </div>
+                {%if userExists%}
+                    <div class="alert alert-danger alert-dismissable fade show">
+                        <strong>Username is already taken</strong>
+                    </div>
+                    <div class="form-group">
+                        <label for="fname">First Name: </label>
+                        <input type="text" class="form-control" name="fname" id="fname" placeholder="Enter first name" value="{{fname}}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lname">Last Name: </label>
+                        <input type="text" class="form-control" name="lname" id="lname" placeholder="Enter last name" value="{{lname}}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="emailid">Email ID: </label>
+                        <input type="email" class="form-control" name="emailid" id="emailid" placeholder="Enter email id" value="{{emailid}}" required>
+                    </div>
+                {%else%}
+                    <div class="form-group">
+                        <label for="fname">First Name: </label>
+                        <input type="text" class="form-control" name="fname" id="fname" placeholder="Enter first name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lname">Last Name: </label>
+                        <input type="text" class="form-control" name="lname" id="lname" placeholder="Enter last name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="emailid">Email ID: </label>
+                        <input type="email" class="form-control" name="emailid" id="emailid" placeholder="Enter email id" required>
+                    </div>
+                {%endif%}
                 <label for="pwd">Password: </label>
                 <div class="input-group mb-3">
                     <input type="password" class="form-control" name="pwd" id="pwd" placeholder="Enter password" required>
@@ -48,7 +66,7 @@
                         </button>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+                <button type="submit" class="btn btn-primary btn-block" id="Signup_button" onsubmit="signup()">Sign Up</button>
             </form>
         </div>
     </body>

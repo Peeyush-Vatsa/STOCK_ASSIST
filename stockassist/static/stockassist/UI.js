@@ -11,3 +11,11 @@ function changeVis() {
         pwdToggle.innerHTML = "visibility_off";
     }
 }
+
+function login(){
+    document.getElementById("Login_button").innerHTML = "<span class='spinner-border spinner-border-sm'></span> Logging you in";
+}
+
+function signup(){
+    document.getElementById("Signup_button").innerHTML = "<span class='spinner-border spinner-border-sm'></span> Signing you up";
+}
