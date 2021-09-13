@@ -13,9 +13,22 @@
         <nav class="navbar navbar-expand-sm bg-light fixed-top">
             <div class="navbar-nav w-100">
                 <a class="navbar-brand px-3 py-2 flex-fill" href="#"><h2>Stock Assistant</h2></a>
-                <span class="nav-item px-3 py-2 flex-fill">
-                    <button type="button" class="btn btn-primary float-right btn-lg" data-toggle="modal" data-target="#LoginForm">Login</button>
-                </span>
+                {%if user.is_authenticated%}
+                    <span class="nav-item px-3 py-2 flex-fill">
+                        <span class="dropdown float-right">
+                            <a href="#" class="nav-link dropdown-toggle" id="userdropdown" data-toggle="dropdown">Welcome, {{user.first_name}}</a>
+                            <div class="dropdown-menu">
+                                <a href="#" class="dropdown-item text-center"><u>Account settings</u></a>
+                                <hr>
+                                <a href="{%url 'stockassist:logout'%}" class="btn btn-outline-danger btn-block btn-sm">Logout</a>
+                            </div>
+                        </span>
+                    </span>
+                {%else%}
+                    <span class="nav-item px-3 py-2 flex-fill">
+                        <button type="button" class="btn btn-primary float-right btn-lg" data-toggle="modal" data-target="#LoginForm">Login</button>
+                    </span>
+                {%endif%}
             </div>
         </nav>
 
@@ -28,7 +41,8 @@
                         </div>
                     </div>
                     <div class="modal-body">
-                        <form>
+                        <form method="POST" action="{%url 'stockassist:login'%}">
+                            {%csrf_token%}
                             <div class="form-group">
                                 <label for="username">Username: </label>
                                 <input type="text" class="form-control" name="username" id="username" required>
