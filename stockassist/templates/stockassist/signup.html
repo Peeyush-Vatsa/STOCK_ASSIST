@@ -1,5 +1,6 @@
 <html lang="en-gb">
     <head>
+        {%load static%}
         <meta charset="UTF-8">
         <meta name="description" content="This website is about helping you manage your portfolio">
         <meta name="vviewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,8 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <script src="{%static 'stockassist/UI.js'%}"></script>
         <title>Stock Assistant</title>
     </head>
     <body>
@@ -36,9 +39,14 @@
                     <label for="emailid">Email ID: </label>
                     <input type="email" class="form-control" name="emailid" id="emailid" placeholder="Enter email id" required>
                 </div>
-                <div class="form-group">
-                    <label for="pwd">Password: </label>
+                <label for="pwd">Password: </label>
+                <div class="input-group mb-3">
                     <input type="password" class="form-control" name="pwd" id="pwd" placeholder="Enter password" required>
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-light float-right" onclick="changeVis()">
+                            <i class="material-icons" id="togglePwdIcon">visibility_off</i>
+                        </button>
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
             </form>
