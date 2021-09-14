@@ -30,7 +30,7 @@
                     </span>
                 {%else%}
                     <span class="nav-item px-3 py-2 flex-fill">
-                        <button type="button" class="btn btn-primary float-right btn-lg" data-toggle="modal" data-target="#LoginForm"">Login</button>
+                        <button type="button" class="btn btn-primary float-right btn-lg" data-toggle="modal" data-target="#LoginForm">Login</button>
                     </span>
                 {%endif%}
             </div>
@@ -39,6 +39,7 @@
             {%if notauthenticated%}
                 <div class="alert alert-danger alert-dismissible fade show">
                     <strong>User credentials not valid. Please try again</strong>
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
                 </div>
             {%endif%}
         </div>
