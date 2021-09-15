@@ -1,15 +1,16 @@
 from typing import ContextManager
+from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
 import django.contrib.auth as auth
-from .ajax_templates import topStocks
+from .ajax_templates import search, topStocks
 
 # Create your views here.
 def homepage(request):
     if request.method == 'GET':
         TOPSTOCKS = topStocks()
         context = {
-            'TOPSTOCKS': TOPSTOCKS
+            'stock_result': TOPSTOCKS,
         }
         return render(request, 'stockassist/index.html', context=context)
 
@@ -59,7 +60,7 @@ def login_req(request):
             TOPSTOCKS = topStocks()
             context = {
                 'notauthenticated': True,
-                'TOPSTOCKS': TOPSTOCKS
+                'stock_result': TOPSTOCKS,
             }
             return render(request, 'stockassist/index.html', context)
     else:
@@ -70,3 +71,10 @@ def logout_req(request):
         auth.logout(request)
         return redirect('stockassist:homepage')
 
+def search_stock(request):
+    if request.method == 'GET':
+        str = request.GET['searchStr']
+        result = search(str)
+        return JsonResponse({
+            'stock_result': result
+        })

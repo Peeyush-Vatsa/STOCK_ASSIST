@@ -32,4 +32,33 @@ $(document).ready(() => {
         });
         $("#search_results").slideUp("fast");
     });
+    const sym_1 = document.getElementById("stksymbol_1");
+    const sym_2 = document.getElementById("stksymbol_2");
+    const sym_3 = document.getElementById("stksymbol_3");
+    const com_1 = document.getElementById("companyname_1");
+    const com_2 = document.getElementById("companyname_2");
+    const com_3 = document.getElementById("companyname_3");
+    $("#search_field").keyup(() => {
+        let search_string = $("#search_field").val()
+        if (search_string.length >= 3){
+            //Add preserve code here
+            $.ajax({
+                type: "GET",
+                url: "/ajax/requests/search",
+                data: {
+                    searchStr: search_string
+                },
+                success: (response) => {
+                    array_response = response.stock_result;
+                    console.log(array_response)
+                    sym_1.innerHTML = array_response[0][1];
+                    com_1.innerHTML = array_response[0][2];
+                    sym_2.innerHTML = array_response[1][1];
+                    com_2.innerHTML = array_response[1][2];
+                    sym_3.innerHTML = array_response[2][1];
+                    com_3.innerHTML = array_response[2][2];
+                }
+            });
+        }
+    });
 });

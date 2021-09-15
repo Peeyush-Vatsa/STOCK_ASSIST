@@ -49,17 +49,17 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th class="invisible">Trending</th>
+                            <th class="invisible" id="watchlist">Trending</th>
                             <th>Stock Symbol</th>
                             <th>Company name</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {%for stock in TOPSTOCKS%}
+                        {%for stock in stock_result%}
                             <tr>
-                                <td><i class="material-icons">trending_up</i></td>
-                                <td class="stk_symbol"><a href="#">{{stock.0}}</a></td>
-                                <td class="cmpy_nme">{{stock.1}}</td>
+                                <td><i class="material-icons trendicon">trending_up</i></td>
+                                <td class="stk_symbol" id="stksymbol_{%cycle '1' '2' '3'%}">{{stock.0}}.NSE</td>
+                                <td class="cmpny_nme" id="companyname_{%cycle '1' '2' '3'%}">{{stock.1}}</td>
                             </tr>
                         {%endfor%}
                     </tbody>
