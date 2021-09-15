@@ -1,9 +1,10 @@
-<html lang="en-gb">
+<html lang="en">
     <head>
         {%load static%}
         <meta charset="UTF-8">
         <meta name="description" content="This website is about helping you manage your portfolio">
         <meta name="vviewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{%static 'stockassist/UI.css'%}">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -42,6 +43,28 @@
                     <button type="button" class="close" data-dismiss="alert">&times;</button>
                 </div>
             {%endif%}
+            <br>
+            <input type="text" class="p-2" placeholder="Search stocks by name or symbol" id="search_field">
+            <div id="search_results" class="shadow-lg">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="invisible">Trending</th>
+                            <th>Stock Symbol</th>
+                            <th>Company name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {%for stock in TOPSTOCKS%}
+                            <tr>
+                                <td><i class="material-icons">trending_up</i></td>
+                                <td class="stk_symbol"><a href="#">{{stock.0}}</a></td>
+                                <td class="cmpy_nme">{{stock.1}}</td>
+                            </tr>
+                        {%endfor%}
+                    </tbody>
+                </table>
+            </div>
         </div>
         <div class="modal fade" id="LoginForm">
             <div class="modal-dialog">

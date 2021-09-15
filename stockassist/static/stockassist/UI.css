@@ -1,0 +1,25 @@
+#search_field {
+    display: block;
+    margin: auto;
+    position: relative;
+    width: 30%;
+    border-style: solid ;
+    border-radius: 10px;
+}
+#search_results {
+    display: none;
+    position: relative;
+    width: 60%;
+    height: auto;
+    margin: auto;
+    overflow: scroll;
+}
+
+.stk_symbol{
+    text-align: center;
+    color: darkblue;
+}
+.cmpy_nme{
+    text-align: center;
+    color: darkgreen;
+}

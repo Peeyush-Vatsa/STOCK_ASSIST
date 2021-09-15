@@ -19,3 +19,17 @@ function login(){
 function signup(){
     document.getElementById("Signup_button").innerHTML = "<span class='spinner-border spinner-border-sm'></span> Signing you up";
 }
+$(document).ready(() => {
+    $("#search_field").focus(() => {
+        $("#search_field").animate({
+            width: '60%'
+        });
+        $("#search_results").slideDown("fast");
+    });
+    $("#search_field").blur(() => {
+        $("#search_field").animate({
+            width: '30%'
+        });
+        $("#search_results").slideUp("fast");
+    });
+});

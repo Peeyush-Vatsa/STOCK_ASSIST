@@ -2,11 +2,16 @@ from typing import ContextManager
 from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
 import django.contrib.auth as auth
+from .ajax_templates import topStocks
 
 # Create your views here.
 def homepage(request):
     if request.method == 'GET':
-        return render(request, 'stockassist/index.html')
+        TOPSTOCKS = topStocks()
+        context = {
+            'TOPSTOCKS': TOPSTOCKS
+        }
+        return render(request, 'stockassist/index.html', context=context)
 
 def signup(request):
     if request.method == 'GET':
@@ -36,7 +41,7 @@ def signup(request):
             }
             return render(request, 'stockassist/signup.html', context=context)
     else:
-        return render(request, 'stockassist/index.html')
+        return redirect('stockassist:homepage')
 
 def login_req(request):
     if request.method == 'POST':
@@ -51,8 +56,10 @@ def login_req(request):
         else:
             print("User authentication failed")
             print("Redirecting to homepage...")
+            TOPSTOCKS = topStocks()
             context = {
-                'notauthenticated': True
+                'notauthenticated': True,
+                'TOPSTOCKS': TOPSTOCKS
             }
             return render(request, 'stockassist/index.html', context)
     else:
