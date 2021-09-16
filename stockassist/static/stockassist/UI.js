@@ -42,12 +42,13 @@ $(document).ready(() => {
     $("#search_field").keyup(() => {
         let search_string = $("#search_field").val();
         if (noresults == true){
-            $("#search_info_panel").removeClass("text-danger").addClass("text-info");
+            $("#search_panel").removeClass("text-danger").addClass("text-info");
             $("#search_header").show();
             noresults = false;
         }
         if (search_string.length != ""){
-            $("#search_info_panel").addClass("spinner-border").text("");
+            $("#search_spinner").addClass("spinner-border").text("  ");
+            $("#search_info_panel").text(" Searching ..");
             $.ajax({
                 type: "GET",
                 url: "/ajax/requests/search",
@@ -56,13 +57,14 @@ $(document).ready(() => {
                 },
                 success: (response) => {
                     array_response = response.stock_result;
-                    $("#search_info_panel").removeClass("spinner-border").text("Search Results");
+                    $("#search_info_panel").text("Search Results");
+                    $("#search_spinner").removeClass("spinner-border");
                     let empty_stocks = ['4','3','2','1'];
                     let num = 1;
                     for (stock of array_response){
                         $("#icon_"+num.toString()).html("playlist_add"); //Update to include links
-                        $("#stock_"+num.toString()).html(stock[1]);
-                        $("#company_"+num.toString()).html(stock[2]);
+                        $("#stock_"+num.toString()).html(stock[0]);
+                        $("#company_"+num.toString()).html(stock[1]);
                         $("#searchrow_"+num.toString()).show();
                         empty_stocks.pop();
                         num ++;
@@ -72,7 +74,8 @@ $(document).ready(() => {
                             $("#searchrow_"+row).hide();
                         }
                         if (empty_stocks.length == 4){
-                            $("#search_info_panel").removeClass("text-info").addClass("text-danger").text("No stocks found");
+                            $("#search_panel").removeClass("text-info").addClass("text-danger");
+                            $("#search_info_panel").text("No stocks found");
                             $("#search_header").hide();
                             noresults = true;
                         }
@@ -81,6 +84,8 @@ $(document).ready(() => {
                 },
                 error: () => {
                     //add alert box for unexpected error
+                    $("#errormessages").text("An unexpected error occured. Please try again");
+                    $("#errorbox").css("display", "block");
                 }
             });
         }
