@@ -32,16 +32,15 @@ $(document).ready(() => {
         });
         $("#search_results").slideUp("fast");
     });
-    //const sym_1 = document.getElementById("stksymbol_1");
-    //const sym_2 = document.getElementById("stksymbol_2");
-    //const sym_3 = document.getElementById("stksymbol_3");
-    //const com_1 = document.getElementById("companyname_1");
-    //const com_2 = document.getElementById("companyname_2");
-    //const com_3 = document.getElementById("companyname_3");
+
+    const all_stocks = [
+        [$("#stock_1").text(), $("#company_1").text()],
+        [$("#stock_2").text(), $("#company_2").text()] ,
+        [$("#stock_3").text(), $("#company_3").text()]
+    ];
     $("#search_field").keyup(() => {
         let search_string = $("#search_field").val()
-        if (search_string.length >= 3){
-            //Add preserve code here
+        if (search_string.length != ""){
             $.ajax({
                 type: "GET",
                 url: "/ajax/requests/search",
@@ -50,8 +49,44 @@ $(document).ready(() => {
                 },
                 success: (response) => {
                     array_response = response.stock_result;
+                    let empty_stocks = ['4','3','2','1'];
+                    let num = 1;
+                    for (stock of array_response){
+                        $("#icon_"+num.toString()).html("playlist_add"); //Update to include links
+                        $("#stock_"+num.toString()).html(stock[1]);
+                        $("#company_"+num.toString()).html(stock[2]);
+                        $("#searchrow_"+num.toString()).show();
+                        empty_stocks.pop();
+                        num ++;
+                    }
+                    if (empty_stocks != []){
+                        for (row of empty_stocks){
+                            $("#searchrow_"+row).hide();
+                        }
+                        if (empty_stocks.length == 4){
+                            $("#search_info_panel").css("text-align","center").addClass("bg-danger").text("No results").addClass(
+                                "text-light"
+                            );
+                            $("#search_header").hide();
+                        }
+                    }
+
+                },
+                error: () => {
+                    //add alert box for unexpected error
                 }
             });
+        }
+        else{
+            let num = 1;
+            for (stock of all_stocks){
+                $("#icon_"+num.toString()).html("trending_up");
+                $("#stock_"+num.toString()).html(stock[0]);
+                $("#company_"+num.toString()).html(stock[1]);
+                $("#searchrow_"+num.toString()).show();
+                num ++;
+            }
+            $("#searchrow_4").hide()
         }
     });
 });

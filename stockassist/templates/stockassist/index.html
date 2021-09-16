@@ -48,22 +48,28 @@
             <div id="search_results" class="shadow-lg">
                 <table class="table table-striped">
                     <thead>
-                        <tr>
-                            <th class="invisible" id="watchlist">Trending</th>
+                        <tr id="search_header">
+                            <th id="watchlist"><h6 class="invisible">Trending</h6></th>
                             <th>Stock Symbol</th>
                             <th>Company name</th>
                         </tr>
                     </thead>
                     <tbody>
                         {%for stock in stock_result%}
-                            <tr>
-                                <td><i class="material-icons trendicon">trending_up</i></td>
-                                <td class="stk_symbol" id="stksymbol_{%cycle '1' '2' '3'%}">{{stock.0}}.NSE</td>
-                                <td class="cmpny_nme" id="companyname_{%cycle '1' '2' '3'%}">{{stock.1}}</td>
+                            <tr id="searchrow_{%cycle '1' '2' '3'%}">
+                                <td><i class="material-icons" id="icon_{%cycle '1' '2' '3'%}">trending_up</i></td>
+                                <td class="stk_symbol" id="stock_{%cycle '1' '2' '3'%}">{{stock.0}}</td>
+                                <td class="cmpny_nme" id="company_{%cycle '1' '2' '3'%}">{{stock.1}}</td>
                             </tr>
                         {%endfor%}
+                            <tr style="display: none" id="searchrow_4">
+                                <td><i class="material-icons" id="icon_4">trending_up</i></td>
+                                <td class="stk_symbol" id="stock_4"></td>
+                                <td class="cmpny_nme" id="company_4"></td>
+                            </tr>
                     </tbody>
                 </table>
+                <h4 id="search_info_panel"><!-- Write and program search description here--></h4>
             </div>
         </div>
         <div class="modal fade" id="LoginForm">

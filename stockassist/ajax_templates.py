@@ -24,68 +24,48 @@ def search(str):
     csvreader = csv.reader(nse)
     search_result_nse = []
     for row in csvreader:
-        company_name_split = row[2].upper().split()
-        print("for company", company_name_split)
-        if len(search_result_nse) == 3:
-            print("search complete")
+        if len(search_result_nse) == 4:
             break
+        company_name_split = row[2].upper().split()
         #Special search scenarios
         if str_upper:
-            print("starting upper case scenario")
             if row[1].startswith(str):
-                #priority_nse.append(1) change priority with new scenarios
-                print("Appending", row)
-                search_result_nse.append(row)
+                search_result_nse.append([row[0], row[1]+".NSE", row[2]])
             elif str in row[1]:
-                #priority_nse.append(2)
-                print("Apending", row)
-                search_result_nse.append(row)
+                search_result_nse.append([row[0], row[1]+".NSE", row[2]])
             else:
                 abb = ''
                 for word in company_name_split:
                     abb = abb + word[0]
                 if abb.startswith(str):
-                    #priority_nse.append(3)
-                    print("Appending", row)
-                    search_result_nse.append(row)
+                    search_result_nse.append([row[0], row[1]+".NSE", row[2]])
                     continue
         elif long_len:
-            print("Starting long_len search")
             for word in company_name_split:
                 if word.startswith(str):
-                    #priority
-                    search_result_nse.append(row)
-                    print("Appending", row)
+                    search_result_nse.append([row[0], row[1]+".NSE", row[2]])
                     break
                 elif str in word:
-                    #priority
-                    search_result_nse.append(row)
-                    print("Appending", row)
+                    search_result_nse.append([row[0], row[1]+".NSE", row[2]])
                     break
         if str_space:
-            print("Starting space search")
             i = 0
             search_words = str.split()
             for company_word in company_name_split:
                 for search_word in search_words:
                     if search_word in company_word:
-                        #priority
-                        print("Appending", row)
-                        search_result_nse.append(row)
+                        search_result_nse.append([row[0], row[1]+".NSE"], row[2])
                         break
                 i+=1
                 if i == 4:
                     break
-        if row not in search_result_nse:
-            print("Starting normal search")
+        if [row[0], row[1]+".NSE", row[2]] not in search_result_nse:
             if row[1].startswith(str):
-                search_result_nse.append(row)
-                print("Appending", row)    
+                search_result_nse.append([row[0], row[1]+".NSE", row[2]])    
             else:
                 for word in company_name_split[0:2]:
                     if word.startswith(str):
-                        search_result_nse.append(row)
-                        print("Appending", row)
+                        search_result_nse.append([row[0], row[1]+".NSE", row[2]])
                         break
     nse.close()
     return(search_result_nse)
