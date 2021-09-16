@@ -38,9 +38,16 @@ $(document).ready(() => {
         [$("#stock_2").text(), $("#company_2").text()] ,
         [$("#stock_3").text(), $("#company_3").text()]
     ];
+    let noresults = false;
     $("#search_field").keyup(() => {
-        let search_string = $("#search_field").val()
+        let search_string = $("#search_field").val();
+        if (noresults == true){
+            $("#search_info_panel").removeClass("text-danger").addClass("text-info");
+            $("#search_header").show();
+            noresults = false;
+        }
         if (search_string.length != ""){
+            $("#search_info_panel").addClass("spinner-border").text("");
             $.ajax({
                 type: "GET",
                 url: "/ajax/requests/search",
@@ -49,6 +56,7 @@ $(document).ready(() => {
                 },
                 success: (response) => {
                     array_response = response.stock_result;
+                    $("#search_info_panel").removeClass("spinner-border").text("Search Results");
                     let empty_stocks = ['4','3','2','1'];
                     let num = 1;
                     for (stock of array_response){
@@ -64,10 +72,9 @@ $(document).ready(() => {
                             $("#searchrow_"+row).hide();
                         }
                         if (empty_stocks.length == 4){
-                            $("#search_info_panel").css("text-align","center").addClass("bg-danger").text("No results").addClass(
-                                "text-light"
-                            );
+                            $("#search_info_panel").removeClass("text-info").addClass("text-danger").text("No stocks found");
                             $("#search_header").hide();
+                            noresults = true;
                         }
                     }
 
@@ -86,7 +93,8 @@ $(document).ready(() => {
                 $("#searchrow_"+num.toString()).show();
                 num ++;
             }
-            $("#searchrow_4").hide()
+            $("#searchrow_4").hide();
+            $("#search_info_panel").text("Top Companies");
         }
     });
 });
