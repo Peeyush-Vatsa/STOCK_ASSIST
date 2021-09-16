@@ -56,9 +56,6 @@ def search(str):
                     if search_word in company_word:
                         search_result_nse.append([row[0], row[1]+".NSE"], row[2])
                         break
-                i+=1
-                if i == 4:
-                    break
         if [row[0], row[1]+".NSE", row[2]] not in search_result_nse:
             if row[1].startswith(str):
                 search_result_nse.append([row[0], row[1]+".NSE", row[2]])    
