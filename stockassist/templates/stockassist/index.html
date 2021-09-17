@@ -23,8 +23,6 @@
                         <span class="dropdown float-right">
                             <a href="#" class="nav-link dropdown-toggle" id="userdropdown" data-toggle="dropdown">Welcome, {{user.first_name}}</a>
                             <div class="dropdown-menu">
-                                <a href="#" class="dropdown-item text-center"><u>Account settings</u></a>
-                                <hr>
                                 <a href="{%url 'stockassist:logout'%}" class="btn btn-outline-danger btn-block btn-sm">Logout</a>
                             </div>
                         </span>
@@ -49,6 +47,7 @@
             </div>
             <br>
             <input type="text" class="p-2" placeholder="Search stocks by name or symbol" id="search_field">
+            <!--Search Results-->
             <div id="search_results" class="shadow-lg">
                 <table class="table table-striped">
                     <thead>
@@ -73,9 +72,44 @@
                             </tr>
                     </tbody>
                 </table>
-                <div id="search_panel" class="text-info" style="text-align: center;"><span id="search_spinner"></span><h4 id="search_info_panel">Companies</h4></div>
+                <div id="search_panel" class="text-info" style="text-align: center;"><span id="search_spinner"></span><h4 id="search_info_panel">Top Companies</h4></div>
+            </div>
+            <br>
+            <!--Watchlist-->
+            <div class="watchlist">
+                <h4 style="text-align: center;" class="bg-light">My stocks</h4>
+                {%if user.is_authenticated%}
+                    <br>
+                    {%for stock in watchlist_stocks%}
+                        <div class="card stock-card">
+                            <div class="card-header">
+                                {{stock.1}}
+                            </div>
+                            <div class="card-body">
+                                {{stock.2}}
+                            </div>
+                            <div class="card-footer">
+                                View details
+                            </div>
+                        </div>
+                    {%endfor%}
+                {%else%}
+                    <ul class="list-group stock-list">
+                        <li class="list-group-item">
+                            BSE:SENSEX
+                        </li>
+                        <li class="list-group-item">
+                            NIFTY
+                        </li>
+                    </ul>
+                {%endif%}
+            </div>
+            <!--Info Panel-->
+            <div class="info_panel">
+                <h4 style="text-align: center;" class="bg-light">info_display</h4>
             </div>
         </div>
+        <!--Login modal-->
         <div class="modal fade" id="LoginForm">
             <div class="modal-dialog">
                 <div class="modal-content">

@@ -23,3 +23,15 @@
     text-align: center;
     color: darkgreen;
 }
+.info_panel{
+    position: relative;
+    width: 70%;
+    float: right;
+    height: auto;
+}
+.watchlist{
+    position: relative;
+    width: 30%;
+    float: left;
+    height: auto;
+}

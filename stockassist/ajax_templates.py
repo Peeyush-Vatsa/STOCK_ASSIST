@@ -19,14 +19,14 @@ def search(str):
     str = str.upper()
     for result in search_results:
         resultrank = 0
-        if result[0] == str:
+        if result[1] == str:
             resultrank += 0.8
-        if result[1].startswith(str):
+        if result[2].startswith(str):
             resultrank += 0.6
-        if str in result[0]:
+        if str in result[1]:
             resultrank += 0.4
         i = 0.6
-        for word in result[1].upper().split():
+        for word in result[2].upper().split():
             if word.startswith(str):
                 resultrank += i + 0.2
             elif str in word:
@@ -64,39 +64,38 @@ def search_file(str, file_name, market):
         #Special search scenarios
         if str_upper:
             if row[1].startswith(str):
-                search_result.append([row[1]+market, row[2]])
+                search_result.append([row[0], row[1]+market, row[2]])
             elif str in row[1]:
-                search_result.append([row[1]+market, row[2]])
+                search_result.append([row[0], row[1]+market, row[2]])
             else:
                 abb = ''
                 for word in company_name_split:
                     abb = abb + word[0]
                 if abb.startswith(str):
-                    search_result.append([row[1]+market, row[2]])
+                    search_result.append([row[0], row[1]+market, row[2]])
                     continue
         elif long_len:
             for word in company_name_split:
                 if word.startswith(str):
-                    search_result.append([row[1]+market, row[2]])
+                    search_result.append([row[0], row[1]+market, row[2]])
                     break
                 elif str in word:
-                    search_result.append([row[1]+market, row[2]])
+                    search_result.append([row[0], row[1]+market, row[2]])
                     break
         if str_space:
-            i = 0
             search_words = str.split()
             for company_word in company_name_split:
                 for search_word in search_words:
                     if search_word in company_word:
-                        search_result.append([row[1]+market, row[2]])
+                        search_result.append([row[0], row[1]+market, row[2]])
                         break
-        if [row[1]+market, row[2]] not in search_result:
+        if [row[0], row[1]+market, row[2]] not in search_result:
             if row[1].startswith(str):
-                search_result.append([row[1]+market, row[2]])    
+                search_result.append([row[0], row[1]+market, row[2]])    
             else:
                 for word in company_name_split[0:2]:
                     if word.startswith(str):
-                        search_result.append([row[1]+market, row[2]])
+                        search_result.append([row[0], row[1]+market, row[2]])
                         break
     market_file.close()
     return(search_result)

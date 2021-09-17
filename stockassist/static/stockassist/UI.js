@@ -48,10 +48,10 @@ $(document).ready(() => {
         }
         if (search_string.length != ""){
             $("#search_spinner").addClass("spinner-border").text("  ");
-            $("#search_info_panel").text(" Searching ..");
+            $("#search_info_panel").text("");
             $.ajax({
                 type: "GET",
-                url: "/ajax/requests/search",
+                url: "../ajax/requests/search",
                 data: {
                     searchStr: search_string
                 },
@@ -62,9 +62,9 @@ $(document).ready(() => {
                     let empty_stocks = ['4','3','2','1'];
                     let num = 1;
                     for (stock of array_response){
-                        $("#icon_"+num.toString()).html("playlist_add"); //Update to include links
-                        $("#stock_"+num.toString()).html(stock[0]);
-                        $("#company_"+num.toString()).html(stock[1]);
+                        $("#icon_"+num.toString()).html("add"); //Update to include links
+                        $("#stock_"+num.toString()).html(stock[1]);
+                        $("#company_"+num.toString()).html(stock[2]);
                         $("#searchrow_"+num.toString()).show();
                         empty_stocks.pop();
                         num ++;
