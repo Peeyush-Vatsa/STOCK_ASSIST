@@ -6,10 +6,21 @@ def topStocks():
     csvreader = csv.reader(T50_file)
     rows = [] 
     for row in csvreader:
-        rows.append(row[1:3])
+        rows.append([row[1]+'.NSE', row[2]])
     T50_file.close()
     a = random.randint(0,48)
     return rows[a:a+3]
+
+def search_for_id(symbol):
+    list = open('./CSV_data/bse_stocks.csv')
+    csvdata = csv.reader(list)
+    stock_id = -1
+    for stock in csvdata:
+        if stock[1] == symbol:
+            stock_id = stock[0]
+            break
+    list.close()
+    return stock_id 
 
 def search(str):
     nse_stock_results = search_file(str, 'nse_stocks.csv', '.NSE')

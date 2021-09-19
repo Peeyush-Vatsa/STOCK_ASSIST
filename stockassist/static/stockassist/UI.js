@@ -1,4 +1,4 @@
-
+//Javascript
 function changeVis() {
     pwd = document.getElementById("pwd");
     pwdToggle = document.getElementById("togglePwdIcon");
@@ -19,6 +19,8 @@ function login(){
 function signup(){
     document.getElementById("Signup_button").innerHTML = "<span class='spinner-border spinner-border-sm'></span> Signing you up";
 }
+
+//Jquery:
 $(document).ready(() => {
     $("#search_field").focus(() => {
         $("#search_field").animate({
@@ -56,13 +58,14 @@ $(document).ready(() => {
                     searchStr: search_string
                 },
                 success: (response) => {
+                    //Check if stock is already in watchlist
                     array_response = response.stock_result;
                     $("#search_info_panel").text("Search Results");
                     $("#search_spinner").removeClass("spinner-border");
                     let empty_stocks = ['4','3','2','1'];
                     let num = 1;
                     for (stock of array_response){
-                        $("#icon_"+num.toString()).html("add"); //Update to include links
+                        $("#icon_"+num.toString()).html("add");
                         $("#stock_"+num.toString()).html(stock[1]);
                         $("#company_"+num.toString()).html(stock[2]);
                         $("#searchrow_"+num.toString()).show();
@@ -83,7 +86,6 @@ $(document).ready(() => {
 
                 },
                 error: () => {
-                    //add alert box for unexpected error
                     $("#errormessages").text("An unexpected error occured. Please try again");
                     $("#errorbox").css("display", "block");
                 }
@@ -92,7 +94,6 @@ $(document).ready(() => {
         else{
             let num = 1;
             for (stock of all_stocks){
-                $("#icon_"+num.toString()).html("trending_up");
                 $("#stock_"+num.toString()).html(stock[0]);
                 $("#company_"+num.toString()).html(stock[1]);
                 $("#searchrow_"+num.toString()).show();
@@ -102,4 +103,5 @@ $(document).ready(() => {
             $("#search_info_panel").text("Top Companies");
         }
     });
+    //Add code here
 });

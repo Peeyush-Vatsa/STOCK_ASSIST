@@ -11,6 +11,7 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <!--<script src="https://kit.fontawsome.com/6d65510908.js" crossorigin="anonymous"></script>-->
         <script src="{%static 'stockassist/UI.js'%}"></script>
+        <script src="{%static 'stockassist/stockrequests.js'%}"></script>
 
         <title>Stock Assistant</title>
     </head>
@@ -41,6 +42,10 @@
                     <button type="button" class="close" data-dismiss="alert">&times;</button>
                 </div>
             {%endif%}
+            <div class="alert alert-warning alert-dismissible fade show" id="loginrequired" style="display: none;">
+                <strong>Please log in to use the watchlist</strong>
+                <button class="close" type="button" data-dismiss="alert">&times;</button>
+            </div>
             <div class="alert alert-danger alert-dismissible fade show" id="errorbox" style="display: none;">
                 <strong id="errormessages"></strong>
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -60,13 +65,29 @@
                     <tbody>
                         {%for stock in stock_result%}
                             <tr id="searchrow_{%cycle '1' '2' '3'%}">
-                                <td><i class="material-icons" id="icon_{%cycle '1' '2' '3'%}">trending_up</i></td>
+                                {%if user.is_authenticated%}
+                                    <td>
+                                        <button type="button" class="btn" id="add_to_watchlist_{%cycle '1' '2' '3'%}">
+                                            <i class="material-icons" id="icon_{%cycle '1' '2' '3'%}">add</i>
+                                        </button>
+                                    </td>
+                                {%else%}
+                                <td>
+                                    <button type="button" class="btn" onclick="$('#loginrequired').show()">
+                                        <i class="material-icons" id="icon_{%cycle '1' '2' '3'%}">add</i>
+                                    </button>
+                                </td>
+                                {%endif%}
                                 <td class="stk_symbol" id="stock_{%cycle '1' '2' '3'%}">{{stock.0}}</td>
                                 <td class="cmpny_nme" id="company_{%cycle '1' '2' '3'%}">{{stock.1}}</td>
                             </tr>
                         {%endfor%}
                             <tr style="display: none" id="searchrow_4">
-                                <td><i class="material-icons" id="icon_4">trending_up</i></td>
+                                <td>
+                                    <button class="btn" id="add_to_watchlist_4">
+                                        <i class="material-icons" id="icon_4">add</i>
+                                    </button>
+                                </td>
                                 <td class="stk_symbol" id="stock_4"></td>
                                 <td class="cmpny_nme" id="company_4"></td>
                             </tr>
@@ -77,22 +98,24 @@
             <br>
             <!--Watchlist-->
             <div class="watchlist">
-                <h4 style="text-align: center;" class="bg-light">My stocks</h4>
+                <h4 style="text-align: center; border-style: none none solid none;" class="bg-light">My stocks</h4>
                 {%if user.is_authenticated%}
                     <br>
-                    {%for stock in watchlist_stocks%}
-                        <div class="card stock-card">
-                            <div class="card-header">
-                                {{stock.1}}
-                            </div>
-                            <div class="card-body">
-                                {{stock.2}}
-                            </div>
-                            <div class="card-footer">
-                                View details
-                            </div>
-                        </div>
-                    {%endfor%}
+                    <ul class="list-group stock-card">
+                        {%for stock in watchlist_stocks%}
+                            <li class="list-group-item">
+                                    <span style="float: left;"><strong>{{stock.stk_symbol}}</strong></span>
+                                    <span style="color: firebrick; float: right; font-size: large;"><strong>131.90</strong> <i class="material-icons" style="vertical-align: middle;">arrow_downward</i>
+                                    </span>
+                                    <br>
+                                    <span style="color:dimgray; float: left;">{{stock.stk_name}}</span>
+                                    <br>
+                                    <!--add onclick function wrt stock symbol-->
+                                    <span style="float: left;"><a href="#">View details</a></span>
+                                    <span style="float: right;"><button class="btn" type="button"><i class="material-icons">delete</i></button></span>
+                            </li>
+                        {%endfor%}
+                    </ul>
                 {%else%}
                     <ul class="list-group stock-list">
                         <li class="list-group-item">
@@ -147,6 +170,5 @@
             </div>
         </div>
 
-       
     </body>
 </html>

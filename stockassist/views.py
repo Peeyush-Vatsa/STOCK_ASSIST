@@ -1,9 +1,9 @@
 from django.contrib.auth import models
-from django.http.response import JsonResponse
+from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
 import django.contrib.auth as auth
-from .ajax_templates import search, topStocks
+from .ajax_templates import search, search_for_id, topStocks
 from stockassist.models import watchlist_stocks_current
 
 # Create your views here.
@@ -14,7 +14,7 @@ def homepage(request):
             'stock_result': TOPSTOCKS,
         }
         if request.user.is_authenticated:
-            my_stocks = watchlist_stocks_current.objects.filter(watchlist_user = request.user)
+            my_stocks = watchlist_stocks_current.objects.filter(watchlist_user = request.user.username)
             context['watchlist_stocks'] = my_stocks
         return render(request, 'stockassist/index.html', context=context)
 
@@ -82,11 +82,27 @@ def search_stock(request):
             'stock_result': result
         })
 
-def add_stock_to_watchlist(request, symbol, name, id):
+def add_stock_to_watchlist(request):
     if request.method == 'GET':
         if request.user.is_authenticated:
-            stk = watchlist_stocks_current(stk_symbol=symbol, stk_name=name, stk_id = id, watchlist_user = request.user)
-            stk.save()
-            return redirect('stockassist:homepage')
+            stock_symbol = request.GET['symbol']
+            if stock_symbol.split('.')[1] == 'BSE':
+                stock_id = search_for_id(stock_symbol)
+            else:
+                stock_id = 0
+            stock_in_watchlist = False
+            try:
+                stock = watchlist_stocks_current.objects.get(stk_symbol=stock_symbol, watchlist_user=request.user.username)
+                stock_in_watchlist = True
+            except:
+                pass
+            if not stock_in_watchlist:
+                stk = watchlist_stocks_current(
+                    stk_symbol=stock_symbol, stk_name=request.GET['stock_name'], 
+                    stk_id = stock_id, watchlist_user=request.user.username)
+                stk.save()
+                return JsonResponse({'issuccessful': True})
+            else:
+                return JsonResponse({'issuccessful': False})
         else:
             return redirect('stockassist:homepage')
