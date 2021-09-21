@@ -52,7 +52,7 @@ def search(str):
         a = max(search_rank)
         rank_index = search_rank.index(a)
         final_result.append(search_results[int(rank_index)])
-        search_rank[int(rank_index)] = 0
+        search_rank[int(rank_index)] = -1
     return final_result
 
 
@@ -69,7 +69,7 @@ def search_file(str, file_name, market):
     csvreader = csv.reader(market_file)
     search_result = []
     for row in csvreader:
-        if len(search_result) == 20:
+        if len(search_result) == 40:
             break
         company_name_split = row[2].upper().split()
         #Special search scenarios

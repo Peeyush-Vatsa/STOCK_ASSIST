@@ -97,8 +97,9 @@
             </div>
             <br>
             <!--Watchlist-->
-            <div class="watchlist">
-                <h4 style="text-align: center; border-style: none none solid none;" class="bg-light">My stocks</h4>
+            <div class="watchlist shadow-lg">
+                <br>
+                <h4 style="text-align: center;"><u><b>My stocks</b></u></h4>
                 {%if user.is_authenticated%}
                     <br>
                     <ul class="list-group stock-card">
@@ -112,7 +113,14 @@
                                     <br>
                                     <!--add onclick function wrt stock symbol-->
                                     <span style="float: left;"><a href="#">View details</a></span>
-                                    <span style="float: right;"><button class="btn" type="button"><i class="material-icons">delete</i></button></span>
+                                    <span style="float: right;"><a href="{%url 'stockassist:deletestock' stock.stk_symbol%}"><i class="material-icons" style="color: crimson;">delete</i></a></span>
+                            </li>
+                        {%empty%}
+                            <li class="list-group-item">
+                                <div style="vertical-align: middle;">
+                                    <h5 style="text-align: center;">No stocks in watchlist</h5>
+                                    <button class="btn btn-success btn-block" onclick="$('#search_field').focus()">Add stock</button>
+                                </div>
                             </li>
                         {%endfor%}
                     </ul>

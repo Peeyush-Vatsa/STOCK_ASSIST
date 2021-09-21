@@ -106,3 +106,11 @@ def add_stock_to_watchlist(request):
                 return JsonResponse({'issuccessful': False})
         else:
             return redirect('stockassist:homepage')
+
+def delete_from_watchlist(request, stock_symbol):
+    if request.method == 'GET':
+        watchlist_stocks_current.objects.get(stk_symbol=stock_symbol, watchlist_user=request.user.username).delete()
+        return redirect('stockassist:homepage')
+
+def get_stock_price(request):
+    pass
