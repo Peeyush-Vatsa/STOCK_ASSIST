@@ -36,9 +36,9 @@ $(document).ready(() => {
     });
 
     const all_stocks = [
-        [$("#stock_1").text(), $("#company_1").text()],
-        [$("#stock_2").text(), $("#company_2").text()] ,
-        [$("#stock_3").text(), $("#company_3").text()]
+        [$("#stock_1").text(), $("#company_1").text(), $("add_to_watchlist_1").attr("href")],
+        [$("#stock_2").text(), $("#company_2").text(), $("add_to_watchlist_2").attr("href")] ,
+        [$("#stock_3").text(), $("#company_3").text(), $("add_to_watchlist_3").attr("href")]
     ];
     let noresults = false;
     $("#search_field").keyup(() => {
@@ -65,9 +65,11 @@ $(document).ready(() => {
                     let empty_stocks = ['4','3','2','1'];
                     let num = 1;
                     for (stock of array_response){
-                        $("#icon_"+num.toString()).html("add");
-                        $("#stock_"+num.toString()).html(stock[1]);
-                        $("#company_"+num.toString()).html(stock[2]);
+                        console.log("Stock_"+num.toString()+stock);
+                        $("#stock_"+num.toString()).html(stock[0]);
+                        $("#company_"+num.toString()).html(stock[1]);
+                        $("#add_to_watchlist_"+num.toString()).attr("href", "../addstock/"+stock[0]+"/"+stock[1]+"/");
+                        console.log($("#add_to_watchlist_"+num.toString()).css('href'));
                         $("#searchrow_"+num.toString()).show();
                         empty_stocks.pop();
                         num ++;
@@ -94,6 +96,7 @@ $(document).ready(() => {
         else{
             let num = 1;
             for (stock of all_stocks){
+                $("#add_to_watchlist_"+num.toString()).attr('href', stock[2]);
                 $("#stock_"+num.toString()).html(stock[0]);
                 $("#company_"+num.toString()).html(stock[1]);
                 $("#searchrow_"+num.toString()).show();

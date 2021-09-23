@@ -3,7 +3,7 @@ from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
 import django.contrib.auth as auth
-from .ajax_templates import add_stock_to_db, remove_stock_from_db, search, search_for_id, topStocks
+from .ajax_templates import add_stock_to_db, remove_stock_from_db, search, topStocks
 from stockassist.models import watchlist_stocks_current
 
 # Create your views here.
@@ -82,14 +82,9 @@ def search_stock(request):
             'stock_result': result
         })
 
-def add_stock_to_watchlist(request):
+def add_stock_to_watchlist(request, stock_symbol, stock_name):
     if request.method == 'GET':
         if request.user.is_authenticated:
-            stock_symbol = request.GET['symbol']
-            if stock_symbol.split('.')[1] == 'BSE':
-                stock_id = search_for_id(stock_symbol)
-            else:
-                stock_id = 0
             stock_in_watchlist = False
             try:
                 stock = watchlist_stocks_current.objects.get(stk_symbol=stock_symbol, watchlist_user=request.user.username)
@@ -98,13 +93,13 @@ def add_stock_to_watchlist(request):
                 pass
             if not stock_in_watchlist:
                 stk = watchlist_stocks_current(
-                    stk_symbol=stock_symbol, stk_name=request.GET['stock_name'], 
-                    stk_id = stock_id, watchlist_user=request.user.username)
+                    stk_symbol=stock_symbol, stk_name=stock_name, 
+                    watchlist_user=request.user.username)
                 stk.save()
                 add_stock_to_db(stock_symbol)
-                return JsonResponse({'issuccessful': True})
+                return redirect('stockassist:homepage')
             else:
-                return JsonResponse({'issuccessful': False})
+                return redirect('stockassist:homepage')
         else:
             return redirect('stockassist:homepage')
 

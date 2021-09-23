@@ -67,14 +67,14 @@
                             <tr id="searchrow_{%cycle '1' '2' '3'%}">
                                 {%if user.is_authenticated%}
                                     <td>
-                                        <button type="button" class="btn" id="add_to_watchlist_{%cycle '1' '2' '3'%}">
-                                            <i class="material-icons" id="icon_{%cycle '1' '2' '3'%}">add</i>
-                                        </button>
+                                        <a class="btn" id="add_to_watchlist_{%cycle '1' '2' '3'%}" href="{%url 'stockassist:addstock' stock.0 stock.1%}">
+                                            <i class="material-icons">add</i>
+                                        </a>
                                     </td>
                                 {%else%}
                                 <td>
                                     <button type="button" class="btn" onclick="$('#loginrequired').show()">
-                                        <i class="material-icons" id="icon_{%cycle '1' '2' '3'%}">add</i>
+                                        <i class="material-icons">add</i>
                                     </button>
                                 </td>
                                 {%endif%}
@@ -84,9 +84,9 @@
                         {%endfor%}
                             <tr style="display: none" id="searchrow_4">
                                 <td>
-                                    <button class="btn" id="add_to_watchlist_4">
-                                        <i class="material-icons" id="icon_4">add</i>
-                                    </button>
+                                    <a class="btn" id="add_to_watchlist_4" href="#">
+                                        <i class="material-icons">add</i>
+                                    </a>
                                 </td>
                                 <td class="stk_symbol" id="stock_4"></td>
                                 <td class="cmpny_nme" id="company_4"></td>

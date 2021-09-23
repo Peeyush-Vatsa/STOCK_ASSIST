@@ -5,5 +5,4 @@ from django.db import models
 class watchlist_stocks_current(models.Model):
     stk_symbol = models.CharField(max_length=50, null=False, default='NULL_FIELD')
     stk_name = models.CharField(max_length=200, null=False, default='NULL_FIELD')
-    stk_id = models.IntegerField(default=0)
     watchlist_user = models.CharField(max_length=200, null=False, default='NULL_FIELD')
