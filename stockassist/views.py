@@ -3,7 +3,7 @@ from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
 import django.contrib.auth as auth
-from .ajax_templates import search, search_for_id, topStocks
+from .ajax_templates import add_stock_to_db, remove_stock_from_db, search, search_for_id, topStocks
 from stockassist.models import watchlist_stocks_current
 
 # Create your views here.
@@ -101,6 +101,7 @@ def add_stock_to_watchlist(request):
                     stk_symbol=stock_symbol, stk_name=request.GET['stock_name'], 
                     stk_id = stock_id, watchlist_user=request.user.username)
                 stk.save()
+                add_stock_to_db(stock_symbol)
                 return JsonResponse({'issuccessful': True})
             else:
                 return JsonResponse({'issuccessful': False})
@@ -110,7 +111,12 @@ def add_stock_to_watchlist(request):
 def delete_from_watchlist(request, stock_symbol):
     if request.method == 'GET':
         watchlist_stocks_current.objects.get(stk_symbol=stock_symbol, watchlist_user=request.user.username).delete()
-        return redirect('stockassist:homepage')
+        try:
+            stk = watchlist_stocks_current.objects.get(stk_symbol=stock_symbol)
+        except:
+            remove_stock_from_db(stock_symbol)
+        finally:
+            return redirect('stockassist:homepage')
 
 def get_stock_price(request):
     pass

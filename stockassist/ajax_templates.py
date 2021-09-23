@@ -1,5 +1,6 @@
 import csv
 import random
+from stockassist.cloudant_connect import add_stock, get_stocks
 
 def topStocks():
     T50_file = open("./CSV_data/top_stocks.csv","r")
@@ -31,7 +32,7 @@ def search(str):
     for result in search_results:
         resultrank = 0
         if result[1] == str:
-            resultrank += 0.8
+            resultrank += 1.2
         if result[2].startswith(str):
             resultrank += 0.6
         if str in result[1]:
@@ -110,3 +111,35 @@ def search_file(str, file_name, market):
                         break
     market_file.close()
     return(search_result)
+
+def add_stock_to_db(stock):
+    stock_details = get_stocks()
+    if stock in stock_details['stocks']:
+        return True
+    else:
+        stock_split = stock.split(".")
+        if stock_split[1] == 'NSE':
+            stock = stock_split[0]+'.NS'
+        elif stock_split[1] == 'BSE':
+            stock = stock_split[0]+'.BO'
+        else:
+            return False
+        existing_stocks = stock_details['stocks']
+        existing_stocks.append(stock)
+        stock_details['stocks'] = existing_stocks
+        res = add_stock(stock_details)
+        if res[0]['ok'] and res[1]['ok']:
+            return True
+        else: return False
+
+def remove_stock_from_db(stock):
+    stock_details = get_stocks()
+    stock_split = stock.split('.')
+    if stock_split[1] == 'NSE':
+        stock = stock_split[0]+ '.NS'
+    else:
+        stock = stock_split[0]+ '.BO'
+    existing_stocks = stock_details['stocks']
+    existing_stocks.remove(stock)
+    stock_details['stocks'] = existing_stocks
+    add_stock(stock_details)
