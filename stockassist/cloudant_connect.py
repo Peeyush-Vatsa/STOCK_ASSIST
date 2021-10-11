@@ -18,7 +18,6 @@ def get_stocks():
     for stock in stocks:
         ok_stocks.append(stock)
     final_result = {'doc_id': response['rows'][0]['doc']['_id'],'rev': response['rows'][0]['doc']['_rev'], 'stocks': ok_stocks}
-    #print(final_result)
     return final_result
 
 def add_stock(stocks):
@@ -30,7 +29,6 @@ def add_stock(stocks):
         doc_id=stocks['doc_id'],
         rev=stocks['rev']
     ).get_result()
-    #print(res1)
     mystocklist = Document(
         equities=equities
     )
@@ -38,6 +36,5 @@ def add_stock(stocks):
         db='stock-to-find',
         document=mystocklist
     ).get_result()
-    #print(response)
     return [res1, response]
 
