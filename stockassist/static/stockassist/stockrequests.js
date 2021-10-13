@@ -1,2 +1,3 @@
-var session_stocks = [];
-
+$('document').ready(()=> {
+//Verify stock before changing using AJAX
+});
