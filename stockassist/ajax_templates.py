@@ -1,6 +1,8 @@
 import csv
 import random
 from stockassist.cloudant_connect import add_stock, get_stocks
+from datetime import datetime
+from stockassist.models import watchlist_stocks_current
 
 def topStocks():
     T50_file = open("./CSV_data/top_stocks.csv","r")
@@ -132,3 +134,28 @@ def remove_stock_from_db(stock):
     existing_stocks.remove(stock)
     stock_details['stocks'] = existing_stocks
     add_stock(stock_details)
+
+def is_market_holday():
+    curtime = datetime.now()
+    if curtime.strftime('%a') in ['Sat', 'Sun']:
+        return False
+    if curtime.strftime('%H') in ['10', '11', '12', '13', '14']:
+        return True
+    if curtime.strftime('%H') == '09':
+        if int(curtime.strftime('%M')) >= 15:
+            return True
+        return False
+    if curtime.strftime('%H')=='15':
+        if int(curtime.strftime('%M')) <= 30:
+            return True
+    return False
+
+def update_price_in_local_db(prices, uname):
+    for key in prices:
+        if key.split('.')[1] == 'NS':
+            key_formatted=key.split('.')[0]+'.NSE'
+        else:
+            key_formatted=key.split('.')[0]+'.BSE'
+        row = watchlist_stocks_current.objects.get(stk_symbol=key_formatted, watchlist_user=uname)
+        row.stk_price = prices[key]
+        row.save()

@@ -38,3 +38,11 @@ def add_stock(stocks):
     ).get_result()
     return [res1, response]
 
+def fetch_current_prices():
+    response = service.post_all_docs(
+        db='day-stock-price',
+        include_docs=True
+    ).get_result()
+    prices = response['rows'][-1]['doc']['price']
+    return prices
+    

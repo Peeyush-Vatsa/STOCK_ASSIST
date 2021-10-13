@@ -106,7 +106,7 @@
                         {%for stock in watchlist_stocks%}
                             <li class="list-group-item">
                                     <span style="float: left;"><strong>{{stock.stk_symbol}}</strong></span>
-                                    <span style="color: firebrick; float: right; font-size: large;"><strong>131.90</strong> <i class="material-icons" style="vertical-align: middle;">arrow_downward</i>
+                                    <span style="color: firebrick; float: right; font-size: large;"><strong>{{stock.stk_price}}</strong> <i class="material-icons" style="vertical-align: middle;">arrow_downward</i>
                                     </span>
                                     <br>
                                     <span style="color:dimgray; float: left;">{{stock.stk_name}}</span>

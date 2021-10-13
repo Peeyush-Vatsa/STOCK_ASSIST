@@ -3,7 +3,9 @@ from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
 import django.contrib.auth as auth
-from .ajax_templates import add_stock_to_db, remove_stock_from_db, search, topStocks
+
+from stockassist.cloudant_connect import fetch_current_prices
+from .ajax_templates import add_stock_to_db, is_market_holday, remove_stock_from_db, search, topStocks, update_price_in_local_db
 from stockassist.models import watchlist_stocks_current
 
 # Create your views here.
@@ -11,11 +13,15 @@ def homepage(request):
     if request.method == 'GET':
         TOPSTOCKS = topStocks()
         context = {
-            'stock_result': TOPSTOCKS,
+            'stock_result': TOPSTOCKS
         }
         if request.user.is_authenticated:
+            #Check if market is closed
+            current_stock_price = fetch_current_prices()
+            update_price_in_local_db(current_stock_price, request.user.username)
             my_stocks = watchlist_stocks_current.objects.filter(watchlist_user = request.user.username)
             context['watchlist_stocks'] = my_stocks
+            #context['prices'] = 
         return render(request, 'stockassist/index.html', context=context)
 
 def redirect_to_home(request):
@@ -114,4 +120,9 @@ def delete_from_watchlist(request, stock_symbol):
             return redirect('stockassist:homepage')
 
 def get_stock_price(request):
-    pass
+    if request.method == 'GET':
+        if is_market_holday:
+            return JsonResponse({'market':'closed'})
+        else:
+            current_stock_price = fetch_current_prices()
+            return JsonResponse({'market':'open', 'prices': current_stock_price})
