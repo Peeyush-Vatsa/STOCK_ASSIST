@@ -5,18 +5,22 @@ from django.contrib.auth.models import User
 import django.contrib.auth as auth
 
 from stockassist.cloudant_connect import fetch_current_prices
-from .ajax_templates import add_stock_to_db, is_market_holday, remove_stock_from_db, search, topStocks, update_price_in_local_db
+from stockassist.stock_operations import is_market_open
+from .ajax_templates import add_stock_to_db, remove_stock_from_db, search, topStocks, update_price_in_local_db
 from stockassist.models import watchlist_stocks_current
 
 # Create your views here.
+
+#Do an efficiency chech after login page is created
 def homepage(request):
+    #redirect to check auth page
     if request.method == 'GET':
         TOPSTOCKS = topStocks()
         context = {
             'stock_result': TOPSTOCKS
         }
         if request.user.is_authenticated:
-            #Check if market is closed
+            context['market_open'] = is_market_open()
             current_stock_price = fetch_current_prices()
             update_price_in_local_db(current_stock_price, request.user.username)
             my_stocks = watchlist_stocks_current.objects.filter(watchlist_user = request.user.username)
@@ -25,6 +29,7 @@ def homepage(request):
         return render(request, 'stockassist/index.html', context=context)
 
 def redirect_to_home(request):
+    #Add check auth page here
     return redirect('stockassist:homepage')
 
 def signup(request):
@@ -121,8 +126,13 @@ def delete_from_watchlist(request, stock_symbol):
 
 def get_stock_price(request):
     if request.method == 'GET':
-        if is_market_holday:
+        if not is_market_open:
             return JsonResponse({'market':'closed'})
         else:
             current_stock_price = fetch_current_prices()
             return JsonResponse({'market':'open', 'prices': current_stock_price})
+
+def fetch_open_market_price(request):
+    if request.method == 'GET':
+        pass
+        #Add algo to check market open price

@@ -99,7 +99,14 @@
             <!--Watchlist-->
             <div class="watchlist shadow-lg">
                 <br>
-                <h4 style="text-align: center;"><u><b>My stocks</b></u></h4>
+                <h4 style="text-align: center;"><b>My stocks</b></h4>
+                <span id='market_status' class="pb-5" style="text-align: center; position: absolute; width: 100%">
+                    {%if market_open%}
+                        <p class="text-success">Market is open</p>
+                    {%else%}
+                        <p class="text-danger">Market is closed</p>
+                    {%endif%}
+                </span>
                 {%if user.is_authenticated%}
                     <br>
                     <ul class="list-group stock-card">
@@ -123,15 +130,6 @@
                                 </div>
                             </li>
                         {%endfor%}
-                    </ul>
-                {%else%}
-                    <ul class="list-group stock-list">
-                        <li class="list-group-item">
-                            BSE:SENSEX
-                        </li>
-                        <li class="list-group-item">
-                            NIFTY
-                        </li>
                     </ul>
                 {%endif%}
             </div>

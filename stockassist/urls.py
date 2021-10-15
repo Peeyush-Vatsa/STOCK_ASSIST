@@ -12,5 +12,6 @@ urlpatterns = [
     path('addstock/<str:stock_symbol>/<str:stock_name>/', view=views.add_stock_to_watchlist, name='addstock'),
     path('deletestock/<str:stock_symbol>/', view=views.delete_from_watchlist, name='deletestock'),
     path('ajax/requests/search/', view=views.search_stock, name='searchstock'),
+    path('ajax/requests/fetch_price', view=views.get_stock_price, name='fetch_price'),
 
 ]
