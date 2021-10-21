@@ -4,7 +4,7 @@ from . import views
 
 app_name = 'stockassist'
 urlpatterns = [
-    path('', view=views.redirect_to_home),
+    path('', view=views.redirect_to_home, name='authcheck'),
     path('home/', view=views.homepage, name='homepage'),
     path('signup/', view=views.signup, name='signup'),
     path('login/', view=views.login_req, name='login'),

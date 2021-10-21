@@ -15,6 +15,8 @@ from stockassist.models import watchlist_stocks_current
 def homepage(request):
     #redirect to check auth page
     if request.method == 'GET':
+        if not request.user.is_authenticated:
+            return redirect('stockassist:authcheck')
         TOPSTOCKS = topStocks()
         context = {
             'stock_result': TOPSTOCKS
@@ -25,11 +27,15 @@ def homepage(request):
             update_price_in_local_db(current_stock_price, request.user.username)
             my_stocks = watchlist_stocks_current.objects.filter(watchlist_user = request.user.username)
             context['watchlist_stocks'] = my_stocks
-            #context['prices'] = 
         return render(request, 'stockassist/index.html', context=context)
 
 def redirect_to_home(request):
     #Add check auth page here
+    if not request.user.is_authenticated:
+        context = {
+            'notauthenticated': False
+        }
+        return render(request, 'stockassist/loginpage.html', context)
     return redirect('stockassist:homepage')
 
 def signup(request):
@@ -126,7 +132,7 @@ def delete_from_watchlist(request, stock_symbol):
 
 def get_stock_price(request):
     if request.method == 'GET':
-        if not is_market_open:
+        if not is_market_open():
             return JsonResponse({'market':'closed'})
         else:
             current_stock_price = fetch_current_prices()

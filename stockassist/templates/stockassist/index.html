@@ -112,15 +112,25 @@
                     <ul class="list-group stock-card">
                         {%for stock in watchlist_stocks%}
                             <li class="list-group-item">
-                                    <span style="float: left;"><strong>{{stock.stk_symbol}}</strong></span>
-                                    <span style="color:cornflowerblue; float: right; font-size: large;" id="watchlist_{{stock.stk_symbol}}"><strong id="watchlist_price_{{stock.stk_symbol}}">{{stock.stk_price}}</strong> <i class="material-icons" style="vertical-align: middle;" id="watchlist_arrow_{{stock.stk_symbol}}">remove</i>
+                                    <span style="float: left;">
+                                        <strong>{{stock.stk_symbol}}</strong>
+                                    </span>
+                                    <span style="color:cornflowerblue; float: right; font-size: large;" id="watchlist_{{stock.stk_symbol}}">
+                                        <strong id="watchlist_price_{{stock.stk_symbol}}">{{stock.stk_price}} </strong> 
+                                        <i class="material-icons" style="vertical-align: middle;" id="watchlist_arrow_{{stock.stk_symbol}}">remove</i>
                                     </span>
                                     <br>
                                     <span style="color:dimgray; float: left;">{{stock.stk_name}}</span>
                                     <br>
                                     <!--add onclick function wrt stock symbol-->
-                                    <span style="float: left;"><a href="#">View details</a></span>
-                                    <span style="float: right;"><a href="{%url 'stockassist:deletestock' stock.stk_symbol%}"><i class="material-icons" style="color: crimson;">delete</i></a></span>
+                                    <div>
+                                        <span style="float: left;"><a href="#">View details</a></span>
+                                        <span style="float: right;">
+                                            <a href="{%url 'stockassist:deletestock' stock.stk_symbol%}">
+                                                <i class="material-icons" style="color: crimson;">delete</i>
+                                            </a>
+                                        </span>
+                                    </div>
                             </li>
                         {%empty%}
                             <li class="list-group-item">
