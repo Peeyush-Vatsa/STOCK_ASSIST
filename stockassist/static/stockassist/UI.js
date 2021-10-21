@@ -11,7 +11,7 @@ function changeVis() {
         pwdToggle.innerHTML = "visibility_off";
     }
 }
-
+//Increase robustivity
 function login(){
     document.getElementById("Login_button").innerHTML = "<span class='spinner-border spinner-border-sm'></span> Logging you in";
 }

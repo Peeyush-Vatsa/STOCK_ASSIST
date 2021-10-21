@@ -3,7 +3,7 @@
         {%load static%}
         <meta charset="UTF-8">
         <meta name="description" content="This website is about helping you manage your portfolio">
-        <meta name="vviewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="{%static 'stockassist/UI.css'%}">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -28,24 +28,10 @@
                             </div>
                         </span>
                     </span>
-                {%else%}
-                    <span class="nav-item px-3 py-2 flex-fill">
-                        <button type="button" class="btn btn-primary float-right btn-lg" data-toggle="modal" data-target="#LoginForm">Login</button>
-                    </span>
                 {%endif%}
             </div>
         </nav>
         <div class="container-fluid">
-            {%if notauthenticated%}
-                <div class="alert alert-danger alert-dismissible fade show">
-                    <strong>User credentials not valid. Please try again</strong>
-                    <button type="button" class="close" data-dismiss="alert">&times;</button>
-                </div>
-            {%endif%}
-            <div class="alert alert-warning alert-dismissible fade show" id="loginrequired" style="display: none;">
-                <strong>Please log in to use the watchlist</strong>
-                <button class="close" type="button" data-dismiss="alert">&times;</button>
-            </div>
             <div class="alert alert-danger alert-dismissible fade show" id="errorbox" style="display: none;">
                 <strong id="errormessages"></strong>
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -65,19 +51,11 @@
                     <tbody>
                         {%for stock in stock_result%}
                             <tr id="searchrow_{%cycle '1' '2' '3'%}">
-                                {%if user.is_authenticated%}
-                                    <td>
-                                        <a class="btn" id="add_to_watchlist_{%cycle '1' '2' '3'%}" href="{%url 'stockassist:addstock' stock.0 stock.1%}">
-                                            <i class="material-icons">add</i>
-                                        </a>
-                                    </td>
-                                {%else%}
                                 <td>
-                                    <button type="button" class="btn" onclick="$('#loginrequired').show()">
+                                    <a class="btn" id="add_to_watchlist_{%cycle '1' '2' '3'%}" href="{%url 'stockassist:addstock' stock.0 stock.1%}">
                                         <i class="material-icons">add</i>
-                                    </button>
+                                    </a>
                                 </td>
-                                {%endif%}
                                 <td class="stk_symbol" id="stock_{%cycle '1' '2' '3'%}">{{stock.0}}</td>
                                 <td class="cmpny_nme" id="company_{%cycle '1' '2' '3'%}">{{stock.1}}</td>
                             </tr>
@@ -148,43 +126,6 @@
                 <h4 style="text-align: center;" class="bg-light">info_display</h4>
             </div>
         </div>
-        <!--Login modal-->
-        <div class="modal fade" id="LoginForm">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <div class="modal-title">
-                            <h3 class="text-primary">Login</h3>
-                        </div>
-                    </div>
-                    <div class="modal-body">
-                        <form method="POST" action="{%url 'stockassist:login'%}">
-                            {%csrf_token%}
-                            <div class="form-group">
-                                <label for="username">Username: </label>
-                                <input type="text" class="form-control" name="username" id="username" required>
-                            </div>
-                            <label for="pwd">Password: </label>
-                            <div class="input-group mb-3">
-                                <input type="password" class="form-control" name="pwd" id="pwd" required>
-                                <div class="input-group-append">
-                                    <button type="button" class="btn btn-light float-right" onclick="changeVis()">
-                                        <i class="material-icons" id="togglePwdIcon">visibility_off</i>
-                                    </button>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary btn-block" id="Login_button" onsubmit="login()">Log in</button>
-                        </form>
-                        <hr>
-                        <h4 class="text-center">or</h4>
-                        <a href="{% url 'stockassist:signup'%}" class="btn btn-danger btn-block">Sign Up</a>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" data-dismiss="modal" class="btn btn-warning float-right">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+        
     </body>
 </html>

@@ -1,4 +1,3 @@
-from os import name
 from django.urls import path
 from . import views
 
@@ -13,5 +12,6 @@ urlpatterns = [
     path('deletestock/<str:stock_symbol>/', view=views.delete_from_watchlist, name='deletestock'),
     path('ajax/requests/search/', view=views.search_stock, name='searchstock'),
     path('ajax/requests/fetch_price', view=views.get_stock_price, name='fetch_price'),
+    path('/error',view=views.error, name='error'),
 
 ]

@@ -13,7 +13,6 @@ from stockassist.models import watchlist_stocks_current
 
 #Do an efficiency chech after login page is created
 def homepage(request):
-    #redirect to check auth page
     if request.method == 'GET':
         if not request.user.is_authenticated:
             return redirect('stockassist:authcheck')
@@ -28,16 +27,19 @@ def homepage(request):
             my_stocks = watchlist_stocks_current.objects.filter(watchlist_user = request.user.username)
             context['watchlist_stocks'] = my_stocks
         return render(request, 'stockassist/index.html', context=context)
+    else:
+        error(request, 'Looks like you wandered off')
 
 def redirect_to_home(request):
-    #Add check auth page here
-    if not request.user.is_authenticated:
-        context = {
-            'notauthenticated': False
-        }
-        return render(request, 'stockassist/loginpage.html', context)
-    return redirect('stockassist:homepage')
-
+    if request.method == 'GET':
+        if not request.user.is_authenticated:
+            context = {
+                'notauthenticated': False
+            }
+            return render(request, 'stockassist/loginpage.html', context)
+        return redirect('stockassist:homepage')
+    else:
+        error(request, 'Looks like you wandered off')
 def signup(request):
     if request.method == 'GET':
         return render(request, 'stockassist/signup.html')
@@ -77,19 +79,19 @@ def login_req(request):
             auth.login(request, user)
             return redirect('stockassist:homepage')
         else:
-            TOPSTOCKS = topStocks()
             context = {
-                'notauthenticated': True,
-                'stock_result': TOPSTOCKS,
+                'notauthenticated': True
             }
-            return render(request, 'stockassist/index.html', context)
+            return render(request, 'stockassist/loginpage.html', context)
     else:
-        return render(request, 'stockassist/index.html')
+        return render(request, 'stockassist/loginpage.html')
 
 def logout_req(request):
     if request.method == 'GET':
         auth.logout(request)
-        return redirect('stockassist:homepage')
+        return redirect('stockassist:authcheck')
+    else:
+        error(request, 'Looks like you wandered off')
 
 def search_stock(request):
     if request.method == 'GET':
@@ -98,6 +100,8 @@ def search_stock(request):
         return JsonResponse({
             'stock_result': result
         })
+    else:
+        error(request, 'Looks like you wandered off')
 
 def add_stock_to_watchlist(request, stock_symbol, stock_name):
     if request.method == 'GET':
@@ -118,7 +122,9 @@ def add_stock_to_watchlist(request, stock_symbol, stock_name):
             else:
                 return redirect('stockassist:homepage')
         else:
-            return redirect('stockassist:homepage')
+            return redirect('stockassist:authcheck')
+    else:
+        error(request, 'Looks like you wandered off')
 
 def delete_from_watchlist(request, stock_symbol):
     if request.method == 'GET':
@@ -129,6 +135,8 @@ def delete_from_watchlist(request, stock_symbol):
             remove_stock_from_db(stock_symbol)
         finally:
             return redirect('stockassist:homepage')
+    else:
+        error(request, 'Looks like you wandered off')
 
 def get_stock_price(request):
     if request.method == 'GET':
@@ -142,3 +150,6 @@ def fetch_open_market_price(request):
     if request.method == 'GET':
         pass
         #Add algo to check market open price
+
+def error(request, message):
+    return render(request, 'stockassist/error.html', {'errormessage': message})
