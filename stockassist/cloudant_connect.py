@@ -39,10 +39,22 @@ def add_stock(stocks):
     return [res1, response]
 
 def fetch_current_prices():
-    response = service.post_all_docs(
-        db='day-stock-price',
-        include_docs=True
-    ).get_result()
-    prices = response['rows'][-1]['doc']['price']
-    return prices
-    
+    try:
+        response = service.post_all_docs(
+            db='day-stock-price',
+            include_docs=True
+        ).get_result()
+        prices = response['rows'][-1]['doc']['price']
+        return prices
+    except IndexError:
+        fetch_current_prices()    
+def get_open_prices():
+    try:
+        response = service.post_all_docs(
+            db='day-open-prices',
+            include_docs=True
+        ).get_result()
+        open_prices = response['rows'][0]['doc']['open_prices']
+        return open_prices
+    except IndexError:
+        get_open_prices()

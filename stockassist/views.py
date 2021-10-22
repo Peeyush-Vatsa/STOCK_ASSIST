@@ -4,14 +4,13 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
 import django.contrib.auth as auth
 
-from stockassist.cloudant_connect import fetch_current_prices
+from stockassist.cloudant_connect import fetch_current_prices, get_open_prices
 from stockassist.stock_operations import is_market_open
 from .ajax_templates import add_stock_to_db, remove_stock_from_db, search, topStocks, update_price_in_local_db
 from stockassist.models import watchlist_stocks_current
 
 # Create your views here.
 
-#Do an efficiency chech after login page is created
 def homepage(request):
     if request.method == 'GET':
         if not request.user.is_authenticated:
@@ -26,6 +25,8 @@ def homepage(request):
             update_price_in_local_db(current_stock_price, request.user.username)
             my_stocks = watchlist_stocks_current.objects.filter(watchlist_user = request.user.username)
             context['watchlist_stocks'] = my_stocks
+            #Add open prices and formated current stock
+            #Change the template accordingly
         return render(request, 'stockassist/index.html', context=context)
     else:
         error(request, 'Looks like you wandered off')
@@ -148,8 +149,10 @@ def get_stock_price(request):
 
 def fetch_open_market_price(request):
     if request.method == 'GET':
-        pass
-        #Add algo to check market open price
+        prices = get_open_prices()
+        return JsonResponse({'open': prices})
+    else:
+        error(request, 'Looks like you wandered off')
 
 def error(request, message):
     return render(request, 'stockassist/error.html', {'errormessage': message})
