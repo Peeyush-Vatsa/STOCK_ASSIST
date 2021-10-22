@@ -1,5 +1,3 @@
-//Add price formatting
-
 const swap_stock_symbol = (stock) => {
     let new_stock;
     if (stock.endsWith('.NS')){
@@ -24,7 +22,8 @@ const get_open_prices = () => {
             }
         },
         error: (err) => {
-            //Throw error
+            $("#errormessages").text("Sorry, an unexpected error occured");
+            $("#errorbox").slideDown();
         }
     });
 }
@@ -75,7 +74,13 @@ $('document').ready(()=> {
                         let stock = swap_stock_symbol(st);
                         try{
                             $(("#watchlist_price_"+stock).toString()).html(market_prices[st].toFixed(2).toString());
-                            let open_price = sessionStorage.getItem(st);
+                            try{
+                                var open_price = sessionStorage.getItem(st);
+                            }
+                            catch{
+                                get_open_prices();
+                                var open_price = sessionStorage.getItem(st);
+                            }
                             if (Number(open_price) > Number(market_prices[st])){
                                 $("#watchlist_arrow_"+stock).text("arrow_downward");
                                 $("#watchlist_"+stock).css('color', 'firebrick').slideUp(500).slideDown(500);
@@ -86,7 +91,7 @@ $('document').ready(()=> {
                             }
                             else{
                                 $("#watchlist_arrow_"+stock).text("remove");
-                                $("#watchlist_"+stock).css('color', 'cornflowerblue');    
+                                $("#watchlist_"+stock).css('color', 'cornflowerblue').slideUp(500).slideDown(500);    
                             }
                         }
                         catch{
@@ -96,7 +101,8 @@ $('document').ready(()=> {
                 }
             },
             error: (err) => {
-                //Log error here
+                $("errormessages").text("We are unable to contact our servers, please try again later");
+                $("errorbox").slideDown();
             }
         });
     }, 60000);
