@@ -32,6 +32,7 @@
             </div>
         </nav>
         <div class="container-fluid">
+            <!--Error messsage(if any)-->
             <div class="alert alert-danger alert-dismissible fade show" id="errorbox" style="display: none;">
                 <strong id="errormessages"></strong>
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -87,9 +88,11 @@
                 </span>
                 {%if user.is_authenticated%}
                     <br>
+                    <!--Stocks in watchlist-->
                     <ul class="list-group stock-card">
                         {%for stock in watchlist_stocks%}
                             <li class="list-group-item">
+                                <div>
                                     <span style="float: left;">
                                         <strong>{{stock.stk_symbol}}</strong>
                                     </span>
@@ -97,18 +100,25 @@
                                         <strong id="watchlist_price_{{stock.stk_symbol}}">{{stock.stk_price}} </strong> 
                                         <i class="material-icons" style="vertical-align: middle;" id="watchlist_arrow_{{stock.stk_symbol}}">remove</i>
                                     </span>
+                                </div>
                                     <br>
+                                <div style="position: absolute; width: 90%;">
+                                    <span style="float: right; color: cadetblue; display: none;" id="watchlist_netchange_{{stock.stk_symbol}}">+0.00 (0.00%)</span>
+                                </div>
+                                <br>
+                                <div>
                                     <span style="color:dimgray; float: left;">{{stock.stk_name}}</span>
-                                    <br>
+                                </div>
+                                <br>
                                     <!--add onclick function wrt stock symbol-->
-                                    <div>
-                                        <span style="float: left;"><a href="#">View details</a></span>
-                                        <span style="float: right;">
-                                            <a href="{%url 'stockassist:deletestock' stock.stk_symbol%}">
-                                                <i class="material-icons" style="color: crimson;">delete</i>
-                                            </a>
-                                        </span>
-                                    </div>
+                                <div>
+                                    <span style="float: left;"><a href="#">View details</a></span>
+                                    <span style="float: right;">
+                                        <a href="{%url 'stockassist:deletestock' stock.stk_symbol%}">
+                                            <i class="material-icons" style="color: crimson;">delete</i>
+                                        </a>
+                                    </span>
+                                </div>
                             </li>
                         {%empty%}
                             <li class="list-group-item">

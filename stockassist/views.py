@@ -25,8 +25,6 @@ def homepage(request):
             update_price_in_local_db(current_stock_price, request.user.username)
             my_stocks = watchlist_stocks_current.objects.filter(watchlist_user = request.user.username)
             context['watchlist_stocks'] = my_stocks
-            #Add open prices and formated current stock
-            #Change the template accordingly
         return render(request, 'stockassist/index.html', context=context)
     else:
         error(request, 'Looks like you wandered off')
