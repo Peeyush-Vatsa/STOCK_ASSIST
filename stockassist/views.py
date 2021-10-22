@@ -127,7 +127,10 @@ def add_stock_to_watchlist(request, stock_symbol, stock_name):
 
 def delete_from_watchlist(request, stock_symbol):
     if request.method == 'GET':
-        watchlist_stocks_current.objects.get(stk_symbol=stock_symbol, watchlist_user=request.user.username).delete()
+        try:
+            watchlist_stocks_current.objects.get(stk_symbol=stock_symbol, watchlist_user=request.user.username).delete()
+        except:
+            pass
         try:
             stk = watchlist_stocks_current.objects.get(stk_symbol=stock_symbol)
         except:

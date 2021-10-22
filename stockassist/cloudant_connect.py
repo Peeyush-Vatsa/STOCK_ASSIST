@@ -59,6 +59,5 @@ def get_open_prices():
         open_prices = response['rows'][0]['doc']['open_prices']
         return open_prices
     except IndexError:
-        print(response)
         time.sleep(1)
         get_open_prices()

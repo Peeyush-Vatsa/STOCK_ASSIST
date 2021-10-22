@@ -10,6 +10,8 @@ const swap_stock_symbol = (stock) => {
 }
 
 const get_open_prices = () => {
+    $("#loadmessages").html("<span class='spinner-border spinner-border-sm'></span> Fetching stock prices");
+    $("#loadbox").slideDown(500);
     $.ajax({
         type: "GET",
         url: "../ajax/requests/get_opens",
@@ -24,6 +26,7 @@ const get_open_prices = () => {
         error: (err) => {
             $("#errormessages").text("Sorry, an unexpected error occured");
             $("#errorbox").slideDown();
+            $("#loadbox").slideUp(500);
         }
     });
 }
@@ -75,11 +78,13 @@ const initialise_price_display = () => {
         catch{
             continue;
         }
+        $("#loadbox").slideUp(500);
     }
 }
 
 $('document').ready(()=> {
     get_open_prices();
+    setTimeout(get_open_prices,8000);
     setInterval(() => {
         $.ajax({
             type: "GET",
