@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 import os
+import time
 load_dotenv()
 CLOUDANT_URL = os.environ.get('CLOUDANT_URL')
 CLOUDANT_APIKEY='<varname>'+str(os.environ.get('CLOUDANT_APIKEY'))+'</varname>'
@@ -39,22 +40,25 @@ def add_stock(stocks):
     return [res1, response]
 
 def fetch_current_prices():
-    try:
-        response = service.post_all_docs(
+    response = service.post_all_docs(
             db='day-stock-price',
             include_docs=True
         ).get_result()
+    try:
         prices = response['rows'][-1]['doc']['price']
         return prices
     except IndexError:
+        time.sleep(1)
         fetch_current_prices()    
 def get_open_prices():
+    response = service.post_all_docs(
+        db='day-open-prices',
+        include_docs=True
+    ).get_result()
     try:
-        response = service.post_all_docs(
-            db='day-open-prices',
-            include_docs=True
-        ).get_result()
         open_prices = response['rows'][0]['doc']['open_prices']
         return open_prices
     except IndexError:
+        print(response)
+        time.sleep(1)
         get_open_prices()
