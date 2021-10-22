@@ -81,10 +81,12 @@ const initialise_price_display = () => {
         $("#loadbox").slideUp(500);
     }
 }
-
+//Starts here
 $('document').ready(()=> {
-    get_open_prices();
-    setTimeout(get_open_prices,8000);
+    if (!($("#no_stocks_in_watchlist").text())){
+        get_open_prices();
+        setTimeout(get_open_prices,8000);
+    }
     setInterval(() => {
         $.ajax({
             type: "GET",
