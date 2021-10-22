@@ -29,7 +29,7 @@ def search(str):
         if result[1].startswith(str):
             resultrank += 0.6
         if str in result[0]:
-            resultrank += 0.4
+            resultrank += 0.3
         i = 0.6
         for word in result[1].upper().split():
             if word.startswith(str):
@@ -63,7 +63,9 @@ def search_file(str, file_name, market):
     csvreader = csv.reader(market_file)
     search_result = []
     for row in csvreader:
-        if len(search_result) == 40:
+        if len(search_result) == 40 and market=='.BSE':
+            break
+        if len(search_result) == 80 and market=='.NSE':
             break
         company_name_split = row[2].upper().split()
         #Special search scenarios
