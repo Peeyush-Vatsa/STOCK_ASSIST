@@ -11,36 +11,92 @@ const swap_stock_symbol = (stock) => {
     return new_stock;
 }
 
+const get_open_prices = () => {
+    $.ajax({
+        type: "GET",
+        url: "../ajax/requests/get_opens",
+        data: {},
+        success: (response) => {
+            //Fetch data and add to local storage accordingly
+            const mystock_opens = response.open;
+            for (st in mystock_opens){
+                sessionStorage.setItem(st, mystock_opens[st]);
+            }
+        },
+        error: (err) => {
+            //Throw error
+        }
+    });
+}
+const initialise_price_display = () => {
+    for (let i=0;i<sessionStorage.length;i++){
+        let name = sessionStorage.key(i);
+        let stockname = swap_stock_symbol(name);
+        try{
+            const value = Number($("#watchlist_price_"+stockname).text());
+            if (Number(sessionStorage.getItem(name)) < value){
+                $("#watchlist_"+stockname).css('color', 'green');
+                $("#watchlist_price_"+stockname).text(value.toFixed(2).toString());
+                $("#watchlist_arrow_"+stockname).text("arrow_upward");
+            }
+            else if (Number(sessionStorage.getItem(name)) > value){
+                $("#watchlist_"+stockname).css('color', 'firebrick');
+                $("#watchlist_price_"+stockname).text(value.toFixed(2).toString());
+                $("#watchlist_arrow_"+stockname).text("arrow_downward");
+            }
+            else{
+                $("#watchlist_"+stockname).css('color', 'cornflowerblue');
+                $("#watchlist_price_"+stockname).text(value.toFixed(2).toString());
+                $("#watchlist_arrow_"+stockname).text("remove");    
+            }
+        }
+        catch{
+            continue;
+        }
+    }
+}
+
 $('document').ready(()=> {
-    //Add fetch open for the day
+    get_open_prices();
+    initialise_price_display();
     setInterval(() => {
         $.ajax({
             type: "GET",
             url: "../ajax/requests/fetch_price",
             data: {},
             success: (response) => {
-                //Add market is closed res box
                 if (response.market == 'closed'){
                     $("#market_status").html('<p class="text-danger">Market is closed</p>');
                 }
                 else{
                     $("#market_status").html('<p class="text-success">Market is open</p>');
-                    market_prices = response.prices;
-                    for (st in market_prices){
+                    const market_prices = response.prices;
+                    for (let st in market_prices){
                         let stock = swap_stock_symbol(st);
-                        console.log(stock)
                         try{
-
-                            $(("#watchlist_price_"+stock).toString()).html(market_prices[st].toString());
-                            //console.log('#watchlist_price_'+stock);
-                            //console.log('Adding '+ stock + ' : '+ market_prices[st].toString());
+                            $(("#watchlist_price_"+stock).toString()).html(market_prices[st].toFixed(2).toString());
+                            let open_price = sessionStorage.getItem(st);
+                            if (Number(open_price) > Number(market_prices[st])){
+                                $("#watchlist_arrow_"+stock).text("arrow_downward");
+                                $("#watchlist_"+stock).css('color', 'firebrick').slideUp(500).slideDown(500);
+                            }
+                            else if (Number(open_price) < Number(market_prices[st])){
+                                $("#watchlist_arrow_"+stock).text("arrow_upward");
+                                $("#watchlist_"+stock).css('color', 'green').slideUp(500).slideDown(500);
+                            }
+                            else{
+                                $("#watchlist_arrow_"+stock).text("remove");
+                                $("#watchlist_"+stock).css('color', 'cornflowerblue');    
+                            }
                         }
                         catch{
-                            console.log('Not found')
                             continue;
                         }
                     }
                 }
+            },
+            error: (err) => {
+                //Log error here
             }
         });
     }, 60000);
