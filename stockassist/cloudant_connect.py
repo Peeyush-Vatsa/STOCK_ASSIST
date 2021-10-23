@@ -49,6 +49,9 @@ def fetch_current_prices():
         return prices
     except IndexError:
         time.sleep(1)
+        fetch_current_prices()
+    except:
+        time.sleep(1)
         fetch_current_prices()    
 def get_open_prices():
     response = service.post_all_docs(

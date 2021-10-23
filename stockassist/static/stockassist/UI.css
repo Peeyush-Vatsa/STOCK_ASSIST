@@ -25,9 +25,10 @@
 }
 .info_panel{
     position: relative;
-    width: 70%;
+    width: 69%;
     float: right;
-    height: auto;
+    height: 750px;
+    overflow: scroll;
 }
 .watchlist{
     position: relative;
