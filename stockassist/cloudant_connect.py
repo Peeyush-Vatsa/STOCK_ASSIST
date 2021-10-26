@@ -43,9 +43,11 @@ def fetch_current_prices():
     response = service.post_all_docs(
             db='day-stock-price',
             include_docs=True,
+            descending=True,
+            limit=1
         ).get_result()
     try:
-        prices = response['rows'][-1]['doc']['price']
+        prices = response['rows'][0]['doc']['price']
         return prices
     except IndexError:
         time.sleep(1)
