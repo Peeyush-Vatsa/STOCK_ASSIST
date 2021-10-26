@@ -1,10 +1,15 @@
 import csv
 import random
+import requests
 
 from stockassist.cloudant_connect import add_stock, get_stocks
 from datetime import datetime
 from stockassist.models import watchlist_stocks_current
 from stockassist.stock_operations import get_current_price
+
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 def topStocks():
     T50_file = open("./CSV_data/top_stocks.csv","r")
@@ -164,3 +169,16 @@ def update_price_in_local_db(prices, uname):
             row.save()
         except:
             break
+
+def fetch_month_price(ticker):
+    stock_split = ticker.split('.')
+    if stock_split[1] == '.NS':
+        ticker = stock_split[0]+ '.NSE'
+    else:
+        ticker = stock_split[0]+ '.BSE'
+    url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='+ticker+'&apikey='+str(os.environ.get('ALPHAAPI'))
+    r = requests.get(url)
+    data = r.json()
+    #Append for a month only
+    print(data)
+

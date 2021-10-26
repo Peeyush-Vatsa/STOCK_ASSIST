@@ -43,10 +43,9 @@ def fetch_current_prices():
     response = service.post_all_docs(
             db='day-stock-price',
             include_docs=True,
-            limit=1
         ).get_result()
     try:
-        prices = response['rows'][0]['doc']['price']
+        prices = response['rows'][-1]['doc']['price']
         return prices
     except IndexError:
         time.sleep(1)
@@ -65,3 +64,19 @@ def get_open_prices():
     except IndexError:
         time.sleep(1)
         get_open_prices()
+
+def fetch_intraday_prices(ticker):
+    response = service.post_all_docs(
+        db='day-open-prices',
+        include_docs=True,
+    ).get_result()
+    all_docs = response['rows']
+    intra_prices = {}
+    for doc in all_docs:
+        for doc_content in doc['doc']:
+            try:
+                intra_prices[doc_content['_id']] = doc_content['price'][ticker]
+            except:
+                continue
+    return intra_prices
+
