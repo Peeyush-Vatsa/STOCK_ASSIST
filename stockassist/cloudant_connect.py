@@ -64,7 +64,7 @@ def get_open_prices():
     except IndexError:
         time.sleep(1)
         get_open_prices()
-
+'''
 def fetch_intraday_prices(ticker):
     response = service.post_all_docs(
         db='day-open-prices',
@@ -79,4 +79,4 @@ def fetch_intraday_prices(ticker):
             except:
                 continue
     return intra_prices
-
+'''

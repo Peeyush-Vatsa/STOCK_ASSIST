@@ -169,7 +169,7 @@ def update_price_in_local_db(prices, uname):
             row.save()
         except:
             break
-
+'''
 def fetch_month_price(ticker):
     stock_split = ticker.split('.')
     if stock_split[1] == '.NS':
@@ -181,4 +181,4 @@ def fetch_month_price(ticker):
     data = r.json()
     #Append for a month only
     print(data)
-
+'''
