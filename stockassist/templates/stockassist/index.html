@@ -147,42 +147,43 @@
                 <br>
                 <br>
                 <br>
+                <h1 class="text-secondary" style="width: 100%; position: absolute; text-align: center; display: none;">No Stock Selected</h1>
+                <!--Info container-->
                 <div style="width: 100%; align-content: center; position: absolute;">
+                    <!--Important stock info-->
                     <div class="card" style="width: 92%; margin: auto;">
                         <div class="card-header">
-                            About this stock
+                            <strong>About the stock</strong>
                         </div>
                         <div class="card-body">
-                            Financial data
+                            <ul style="width: 49%; float: left; border-style: none solid none none; border-color: silver; border-width: 1px;">
+                                <li id="52week">52 week range: </li>
+                                <li id="eps">EPS: </li>
+                                <li id="mcap">Market Cap: </li>
+                                <li id="open">Open: </li>
+                                <li id="beta">Beta: </li>
+                            </ul>
+                            <ul style="width: 49%; float: right;">
+                                <li id="dividend">Dividend: </li>
+                                <li id="peRatio">P/E Ratio: </li>
+                                <li id="earningsDate">Next Earnings Date: </li>
+                                <li id="pClose">Previous Close: </li>
+                            </ul>
                         </div>
                     </div>
                     <br>
-                    <div class="card-deck" style="width: 95%; margin: auto;">
-                        <div class="card">
-                            <div class="card-header">
-                                About the Company
-                            </div>
-                            <div class="card-body">
-                                Some text
-                            </div>
+                    <!--If invested in stock-->
+                    <button class="btn btn-info ml-4" type="button">Invested in this stock ?</button>
+                    <div class="card" style="width: 92%;margin: auto;display: none;">
+                        <div class="card-header">
+                            My return from this stock
                         </div>
-                        <div class="card">
-                            <div class="card-header">
-                                Company Earnings info
-                            </div>
-                            <div class="card-body">
-                                Some data
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-header">
-                                Income statement
-                            </div>
-                            <div class="card-body">
-                                Some data
-                            </div>
+                        <div class="card-body">
+                            Some data
                         </div>
                     </div>
+                    <br>
+                     
                 </div>
             </div>
         </div>

@@ -59,7 +59,7 @@ const initialise_price_display = () => {
                 $("#watchlist_"+stockname).css('color', 'green');
                 $("#watchlist_price_"+stockname).text(value.toFixed(2).toString());
                 $("#watchlist_arrow_"+stockname).text("arrow_upward");
-                $("#watchlist_netchange_"+stockname).css('color', 'darkgreen').slideUp(500).text(netchange).slideDown(500);
+                $("#watchlist_netchange_"+stockname).css('color', 'darkgreen').text(netchange).slideDown(500);
 
             }
             else if (Number(sessionStorage.getItem(name)) > value){
@@ -72,7 +72,7 @@ const initialise_price_display = () => {
                 $("#watchlist_"+stockname).css('color', 'cornflowerblue');
                 $("#watchlist_price_"+stockname).text(value.toFixed(2).toString());
                 $("#watchlist_arrow_"+stockname).text("remove");    
-                $("#watchlist_netchange_"+stockname).css('color', 'cadetblue').slideUp(500).text(netchange).slideDown(500);
+                $("#watchlist_netchange_"+stockname).css('color', 'cadetblue').text(netchange).slideDown(500);
             }
         }
         catch{
