@@ -11,6 +11,7 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <script src="{%static 'stockassist/UI.js'%}"></script>
         <script src="{%static 'stockassist/stockrequests.js'%}"></script>
+        <script src="{%static 'stockassist/stockinfo.js'%}"></script>
 
         <title>Stock Assistant</title>
     </head>
@@ -139,7 +140,7 @@
                 <div>
                     <ul class="nav justify-content-center py-3" style="position: absolute; width: 100%; border-style: none none solid none; border-width: 2px ;">
                         <li class="nav-item pt-1">
-                            <h4><b>Company Overview</b></h4>
+                            <h4 class="{{watchlist_stocks.0.stk_symbol}}" id="stock_info_name"><b class="text-info">{{watchlist_stocks.0.stk_symbol}}</b></h4><!--Add stock symbol in class-->
                         </li>
                     </ul>
                 </div>
@@ -147,7 +148,6 @@
                 <br>
                 <br>
                 <br>
-                <h1 class="text-secondary" style="width: 100%; position: absolute; text-align: center; display: none;">No Stock Selected</h1>
                 <!--Info container-->
                 <div style="width: 100%; align-content: center; position: absolute;">
                     <!--Important stock info-->
@@ -157,17 +157,17 @@
                         </div>
                         <div class="card-body">
                             <ul style="width: 49%; float: left; border-style: none solid none none; border-color: silver; border-width: 1px;">
-                                <li id="52week">52 week range: </li>
-                                <li id="eps">EPS: </li>
-                                <li id="mcap">Market Cap: </li>
-                                <li id="open">Open: </li>
-                                <li id="beta">Beta: </li>
+                                <li>52 week range: <span id="52week"></span></li>
+                                <li>EPS: <span id="eps"></span></li>
+                                <li>Market Cap: <span id="mcap"></span></li>
+                                <li>Open: <span id="open"></span></li>
+                                <li>Beta: <span id="beta"></span></li>
                             </ul>
                             <ul style="width: 49%; float: right;">
-                                <li id="dividend">Dividend: </li>
-                                <li id="peRatio">P/E Ratio: </li>
-                                <li id="earningsDate">Next Earnings Date: </li>
-                                <li id="pClose">Previous Close: </li>
+                                <li>Dividend: <span id="dividend"></span></li>
+                                <li>P/E Ratio: <span id="peRatio"></span></li>
+                                <li>Next Earnings Date: <span id="earningsDate"></span></li>
+                                <li>Previous Close: <span id="pClose"></span></li>
                             </ul>
                         </div>
                     </div>
@@ -187,6 +187,5 @@
                 </div>
             </div>
         </div>
-        
     </body>
 </html>

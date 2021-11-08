@@ -11,8 +11,8 @@ def get_open_price(stock):
 def is_market_open():
     #Tuned to GMT +00:00
     start_date = str(datetime.now()).split()[0]
-    sen = stock_info.get_data('^BSESN', start_date=start_date)
     try:
+        sen = stock_info.get_data('^BSESN', start_date=start_date)
         market = sen.loc[start_date]
         cur_time = datetime.now().strftime("%H:%M")
         hour = cur_time.split(':')[0]
@@ -25,3 +25,17 @@ def is_market_open():
         return False
 def get_current_price(stock):
     return np.round(stock_info.get_live_price(stock), 2)
+
+def fetch_quote(stock):
+    data = stock_info.get_quote_table(stock)
+    return {
+        '52week': data['52 Week Range'],
+        'eps': data['EPS (TTM)'],
+        'mcap': data['Market Cap'],
+        'open': data['Open'],
+        'beta': data['Beta (5Y Monthly)'],
+        'dividend': data['Forward Dividend & Yield'],
+        'peRatio': data['PE Ratio (TTM)'],
+        'earningsDate': data['Earnings Date'],
+        'pClose': data['Previous Close']
+    }

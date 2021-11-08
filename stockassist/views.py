@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 import django.contrib.auth as auth
 
 from stockassist.cloudant_connect import fetch_current_prices, get_open_prices
-from stockassist.stock_operations import is_market_open
+from stockassist.stock_operations import fetch_quote, is_market_open
 from .ajax_templates import add_stock_to_db, remove_stock_from_db, search, topStocks, update_price_in_local_db
 from stockassist.models import watchlist_stocks_current
 
@@ -154,6 +154,13 @@ def fetch_open_market_price(request):
         return JsonResponse({'open': prices})
     else:
         error(request, 'Looks like you wandered off')
+
+def stock_info_module(request):
+    if request.method == 'GET':
+        data = fetch_quote(request.GET['stock'])
+        return JsonResponse({'fundamental':data})
+    else:
+        error(request, message='Looks like you wandered off')
 
 def error(request, message):
     return render(request, 'stockassist/error.html', {'errormessage': message})
