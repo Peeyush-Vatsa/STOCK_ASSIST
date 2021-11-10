@@ -115,7 +115,7 @@
                                 <br>
                                     <!--add onclick function wrt stock symbol-->
                                 <div>
-                                    <span style="float: left;"><a href="#">View details</a></span>
+                                    <span style="float: left;"><a href="#" onclick="fetch_stock_info('{{stock.stk_symbol}}')">View details</a></span>
                                     <span style="float: right;">
                                         <a href="{%url 'stockassist:deletestock' stock.stk_symbol%}">
                                             <i class="material-icons" style="color: crimson;">delete</i>
@@ -148,6 +148,20 @@
                 <br>
                 <br>
                 <br>
+                <!--Info display status box-->
+                <div style="position: absolute; width: 100%; align-content: center; display: block;">
+                    <div class="alert alert-success" style="width: 95%; margin: auto; display: none;" id="infosuccessbox">
+                        <strong id="infosuccessmessage">foo</strong>
+                    </div>
+                    <div class="alert alert-danger" style="width: 95%; margin: auto; display: none;" id="infoerrorbox">
+                        <strong id="infoerrormessage">foo</strong>
+                    </div>
+                </div>
+                <div id="breakbox" style="display: none;">
+                    <br>
+                    <br>
+                    <br>
+                </div>
                 <!--Info container-->
                 <div style="width: 100%; align-content: center; position: absolute;">
                     <!--Important stock info-->
