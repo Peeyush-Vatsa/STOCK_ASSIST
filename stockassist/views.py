@@ -157,7 +157,8 @@ def fetch_open_market_price(request):
 
 def stock_info_module(request):
     if request.method == 'GET':
-        data = fetch_quote(request.GET['stock'])
+        stock = (request.GET['stock']).format('.')
+        data = fetch_quote(stock)
         return JsonResponse({'fundamental':data})
     else:
         error(request, message='Looks like you wandered off')

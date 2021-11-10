@@ -28,7 +28,7 @@ def get_current_price(stock):
 
 def fetch_quote(stock):
     data = stock_info.get_quote_table(stock)
-    return {
+    fundamental = {
         '52week': data['52 Week Range'],
         'eps': data['EPS (TTM)'],
         'mcap': data['Market Cap'],
@@ -39,3 +39,10 @@ def fetch_quote(stock):
         'earningsDate': data['Earnings Date'],
         'pClose': data['Previous Close']
     }
+    for key in fundamental:
+        try:
+            if (np.isnan(fundamental[key])):
+                fundamental[key] = "N/A"
+        except:
+            continue
+    return fundamental

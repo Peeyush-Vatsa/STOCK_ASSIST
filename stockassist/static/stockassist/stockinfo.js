@@ -1,22 +1,39 @@
 //Prepare data entry here and in index
-const initialise_stock_data = () => {
-    stock_name = $('#stock_info_name').attr('class');
-    fetch_stock_data(stock_name);
-}
+
 const swap_stock_symbol_reverse = (st) => {
-    stock = '';
+    let stock = '';
     if (st.endsWith('.BSE')){
-        stock = st.replace('.BSE', '.BS');
+        stock = st.replace('.BSE', '{}BS');
     }
     else{
-        stock = st.replace('.NSE', '.NS');
+        stock = st.replace('.NSE', '{}NS');
     }
     return stock;
 }
-const fetch_stock_data = (stk) => {
-    st = swap_stock_symbol_reverse(stk);
-    //Add ajax req to get-info
-}
 $('document').ready(() => {
-    setTimeout(initialise_stock_data(), 1500);
+    setTimeout(() => {
+        const stock = $("#stock_info_name").attr('class');
+        const stock_short = swap_stock_symbol_reverse(stock);
+        //Add load box
+        $.ajax({
+            type: 'GET',
+            url: '../ajax/getInfo',
+            data: {
+                stock: stock_short,
+            },
+            success: (response) => {
+                const fundamentals = response.fundamental;
+                for (at in fundamentals){
+                    $("#"+at).text(fundamentals[at]);
+                }
+            },
+            error: (error) => {
+                //Add error box
+                console.log(error);
+            },
+            complete: (xhr, status) => {
+
+            }
+        });
+    }, 1000);
 });
