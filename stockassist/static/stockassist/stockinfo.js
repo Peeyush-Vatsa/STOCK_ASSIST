@@ -3,7 +3,7 @@
 const swap_stock_symbol_reverse = (st) => {
     let stock = '';
     if (st.endsWith('.BSE')){
-        stock = st.replace('.BSE', '{}BS');
+        stock = st.replace('.BSE', '{}BO');
     }
     else{
         stock = st.replace('.NSE', '{}NS');
