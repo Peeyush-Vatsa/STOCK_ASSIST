@@ -115,7 +115,7 @@
                                 <br>
                                     <!--add onclick function wrt stock symbol-->
                                 <div>
-                                    <span style="float: left;"><a href="#" onclick="fetch_stock_info('{{stock.stk_symbol}}')">View details</a></span>
+                                    <span style="float: left;"><a href="javascript:void(0)" onclick="fetch_stock_info('{{stock.stk_symbol}}')">View details</a></span>
                                     <span style="float: right;">
                                         <a href="{%url 'stockassist:deletestock' stock.stk_symbol%}">
                                             <i class="material-icons" style="color: crimson;">delete</i>
@@ -152,11 +152,11 @@
                 <div style="position: absolute; width: 100%; align-content: center; display: block;">
                     <!--Loadbox-->
                     <div class="alert alert-success" style="width: 95%; margin: auto; display: none;" id="infoloadbox">
-                        <strong id="infoloadmessage">foo</strong>
+                        <strong id="infoloadmessage"></strong>
                     </div>
                     <!--Errorbox-->
                     <div class="alert alert-danger" style="width: 95%; margin: auto; display: none;" id="infoerrorbox">
-                        <strong id="infoerrormessage">foo</strong>
+                        <strong id="infoerrormessage"></strong>
                     </div>
                 </div>
                 <div id="breakbox" style="display: none;">
@@ -166,8 +166,11 @@
                 </div>
                 <!--Info container-->
                 <div style="width: 100%; align-content: center; position: absolute;">
+                    <!--Fix canvas-->
+                    <canvas id="day_chart" style="position: absolute; width: 90%; height: 250px;" class="px-3"></canvas>
                     <!--Important stock info-->
-                    <div class="card" style="width: 92%; margin: auto;">
+                    <div class="spacer" style="width:100%; height: 300px;"></div>
+                    <div class="card" style="width: 92%; margin: auto; height: auto;">
                         <div class="card-header">
                             <strong>About the stock</strong>
                         </div>
@@ -203,5 +206,6 @@
                 </div>
             </div>
         </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     </body>
 </html>

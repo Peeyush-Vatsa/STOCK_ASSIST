@@ -1,5 +1,7 @@
 //Prepare data entry here and in index
 
+//Declaring global access var
+
 const swap_stock_symbol_reverse = (st) => {
     let stock = '';
     if (st.endsWith('.BSE')){
@@ -14,6 +16,7 @@ const swap_stock_symbol_reverse = (st) => {
 const fetch_stock_info = (stock) => {
     const stock_short = swap_stock_symbol_reverse(stock);
     //Add loadbox support
+    $("#infoerrorbox").hide();
     $("#infoloadmessage").html("<span class='spinner-border spinner-border-sm'></span> Getting company details");
     $("#infoloadbox").slideDown(500);
     $("#breakbox").slideDown(500);
@@ -37,8 +40,28 @@ const fetch_stock_info = (stock) => {
             //Add error box
             $("#infoerrormessage").html("Unable to fetch data from our servers");
             $("#infoloadbox").slideUp(500);
-            $("#infoloadmessage").html("");
             $("#infoerrorbox").slideDown(500);
+            $("#infoloadmessage").html("");
+        }
+    });
+}
+
+const plotChart = (xDataset, yDataset) => {
+    new Chart("day_chart", {
+        type: 'line',
+        data: {
+            labels: xDataset,
+            datasets: [{
+                fill: false,
+                lineTension: 0,
+                backgroundColor: 'rgba(255,0,0,1.0)',
+                borderColor: 'rgba(255,0,0,0.2)',
+                data: yDataset
+            }]
+        },
+        options: {
+            legend: {display: false},
+
         }
     });
 }
@@ -71,9 +94,16 @@ $('document').ready(() => {
                 //Add error box
                 $("#infoerrormessage").html("Unable to fetch data from our servers");
                 $("#infoloadbox").slideUp(500);
-                $("#infoloadmessage").html("");
                 $("#infoerrorbox").slideDown(500);
+                $("#infoloadmessage").html("");
+                
             }
         });
     }, 100);
+    //Remove later
+    setTimeout(plotChart(['12:20','12:25', '12:30', '12:35', '12:40', '12:45', '12:50', '12:55','13:00','13:05'], 
+                            [1000,1001,1004,1003,1008,1010.80,1009.20,1004.30,1000.40,997.20,990.90]), 3000);
+    setTimeout(plotChart(['12:20','12:25', '12:30', '12:35', '12:40', '12:45', '12:50', '12:55','13:00','13:05', '13:10'], 
+                            [1000,1001,1004,1003,1008,1010.80,1009.20,1004.30,1000.40,997.20,990.90, 994.23]), 20000);
+        
 });

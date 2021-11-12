@@ -66,19 +66,36 @@ def get_open_prices():
     except IndexError:
         time.sleep(1)
         get_open_prices()
-'''
+
 def fetch_intraday_prices(ticker):
     response = service.post_all_docs(
-        db='day-open-prices',
+        db='day-stock-price',
         include_docs=True,
     ).get_result()
     all_docs = response['rows']
     intra_prices = {}
     for doc in all_docs:
-        for doc_content in doc['doc']:
-            try:
-                intra_prices[doc_content['_id']] = doc_content['price'][ticker]
-            except:
-                continue
+        try:
+            p = doc['doc']['price'][ticker]
+            t = doc['doc']['_id']
+            min = int(t.split(':')[1])
+            hr = int(t.split(':')[0])
+            carry = 0
+            min = min + 30
+            if min > 59:
+                min = min - 60
+                carry = 1
+            if time.gmtime().tm_isdst == 0:
+                hr = hr + 5 + carry
+            else:
+                hr = hr + 4 + carry
+            
+            print(p)
+            print(doc['doc'])
+            intra_prices[str(hr)+':'+str(min)] = p
+                
+        except: 
+            continue
     return intra_prices
-'''
+
+print(fetch_intraday_prices('IDEA.NS'))
