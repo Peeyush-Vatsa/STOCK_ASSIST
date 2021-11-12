@@ -27,8 +27,8 @@
     position: relative;
     width: 69%;
     float: right;
-    height: 750px;
-    overflow: scroll;
+    height: 1100px;
+    overflow: auto;
 }
 .watchlist{
     position: relative;

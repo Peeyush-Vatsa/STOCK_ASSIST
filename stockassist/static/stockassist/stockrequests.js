@@ -8,10 +8,12 @@ const swap_stock_symbol = (stock) => {
     }
     return new_stock;
 }
-
+var loadcount = 0;
 const get_open_prices = () => {
-    $("#loadmessages").html("<span class='spinner-border spinner-border-sm'></span> Fetching stock prices");
-    $("#loadbox").slideDown(500);
+    if (loadcount == 0){
+        $("#loadmessages").html("<span class='spinner-border spinner-border-sm'></span> Fetching stock prices");
+        $("#loadbox").slideDown(500);
+    }
     $.ajax({
         type: "GET",
         url: "../ajax/requests/get_opens",
@@ -78,8 +80,12 @@ const initialise_price_display = () => {
         catch{
             continue;
         }
-        $("#loadbox").slideUp(500);
+        if (loadcount == 0){
+            $("#loadbox").slideUp(500);
+        }
+
     }
+    loadcount = loadcount + 1;
 }
 //Starts here
 $('document').ready(()=> {
