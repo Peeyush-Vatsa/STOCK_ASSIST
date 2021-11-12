@@ -1,5 +1,4 @@
 //Prepare data entry here and in index
-
 //Declaring global access var
 
 const swap_stock_symbol_reverse = (st) => {
@@ -12,6 +11,36 @@ const swap_stock_symbol_reverse = (st) => {
     }
     return stock;
 }
+//TODO:
+
+//1. Reduce or compress datapoints
+//2. Add support for changing color w.r.t price change
+//3. Add a huge price block below the chart
+//4. Add support for retrieving other datapoints when intraday data is too small furthur in the day
+//5. Update open price algo for preventing prevoius open at weekends (Update microservice architecture)
+//6. Add support for invested in
+
+var intradayChart;
+const plotChart = (xDataset, yDataset, colorset) => {
+    intradayChart = new Chart("day_chart", {
+        type: 'line',
+        data: {
+            labels: xDataset,
+            datasets: [{
+                fill: false,
+                lineTension: 0,
+                backgroundColor: 'rgba(0,255,0,0)',
+                borderColor: 'rgba(0,255,0,1.0)',
+                data: yDataset
+            }]
+        },
+        options: {
+            legend: {display: false},
+
+        }
+    });
+    intradayChart.resize();
+}
 
 const fetch_stock_info = (stock) => {
     const stock_short = swap_stock_symbol_reverse(stock);
@@ -20,6 +49,8 @@ const fetch_stock_info = (stock) => {
     $("#infoloadmessage").html("<span class='spinner-border spinner-border-sm'></span> Getting company details");
     $("#infoloadbox").slideDown(500);
     $("#breakbox").slideDown(500);
+    $("#chartloadscreen").fadeIn(500);
+    intradayChart.destroy();
     $.ajax({
         type: 'GET',
         url: '../ajax/getInfo',
@@ -27,11 +58,20 @@ const fetch_stock_info = (stock) => {
             stock: stock_short,
         },
         success: (response) => {
-            $("#stock_info_name").html("<b class='text-info'>"+stock+"</b>");
+            $("#stock_info_name").html("<b><u>"+stock+"</u></b>");
             const fundamentals = response.fundamental;
             for (at in fundamentals){
                 $("#"+at).text(fundamentals[at]);
             }
+            const chart_dataset = response.chart_data;
+            const xDataset = [];
+            const ydataset = [];
+            for (let key in chart_dataset){
+                xDataset.push(key);
+                ydataset.push(chart_dataset[key]);
+            }
+            $("#chartloadscreen").fadeOut(500);
+            plotChart(xDataset, ydataset);    
             $("#infoloadbox").slideUp(500);
             $("#breakbox").slideUp(500);
             $("#infoloadmessage").html("");
@@ -46,25 +86,6 @@ const fetch_stock_info = (stock) => {
     });
 }
 
-const plotChart = (xDataset, yDataset) => {
-    new Chart("day_chart", {
-        type: 'line',
-        data: {
-            labels: xDataset,
-            datasets: [{
-                fill: false,
-                lineTension: 0,
-                backgroundColor: 'rgba(255,0,0,1.0)',
-                borderColor: 'rgba(255,0,0,0.2)',
-                data: yDataset
-            }]
-        },
-        options: {
-            legend: {display: false},
-
-        }
-    });
-}
 
 $('document').ready(() => {
     setTimeout(() => {
@@ -85,6 +106,15 @@ $('document').ready(() => {
                 for (at in fundamentals){
                     $("#"+at).text(fundamentals[at]);
                 }
+                const chart_dataset = response.chart_data;
+                const xDataset = [];
+                const ydataset = [];
+                for (let key in chart_dataset){
+                    xDataset.push(key);
+                    ydataset.push(chart_dataset[key]);
+                }
+                $("#chartloadscreen").fadeOut(500);
+                plotChart(xDataset, ydataset);    
                 $("#infoloadbox").slideUp(500);
                 $("#breakbox").slideUp(500);
                 $("#infoloadmessage").html("");
@@ -100,10 +130,4 @@ $('document').ready(() => {
             }
         });
     }, 100);
-    //Remove later
-    setTimeout(plotChart(['12:20','12:25', '12:30', '12:35', '12:40', '12:45', '12:50', '12:55','13:00','13:05'], 
-                            [1000,1001,1004,1003,1008,1010.80,1009.20,1004.30,1000.40,997.20,990.90]), 3000);
-    setTimeout(plotChart(['12:20','12:25', '12:30', '12:35', '12:40', '12:45', '12:50', '12:55','13:00','13:05', '13:10'], 
-                            [1000,1001,1004,1003,1008,1010.80,1009.20,1004.30,1000.40,997.20,990.90, 994.23]), 20000);
-        
 });

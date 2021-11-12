@@ -140,7 +140,7 @@
                 <div>
                     <ul class="nav justify-content-center py-3" style="position: absolute; width: 100%; border-style: none none solid none; border-width: 2px ;">
                         <li class="nav-item pt-1">
-                            <h4 class="{{watchlist_stocks.0.stk_symbol}}" id="stock_info_name"><b class="text-info">{{watchlist_stocks.0.stk_symbol}}</b></h4><!--Add stock symbol in class-->
+                            <h4 class="{{watchlist_stocks.0.stk_symbol}}" id="stock_info_name"><b><u>{{watchlist_stocks.0.stk_symbol}}</u></b></h4><!--Add stock symbol in class-->
                         </li>
                     </ul>
                 </div>
@@ -167,9 +167,12 @@
                 <!--Info container-->
                 <div style="width: 100%; align-content: center; position: absolute;">
                     <!--Fix canvas-->
-                    <canvas id="day_chart" style="position: absolute; width: 90%; height: 250px;" class="px-3"></canvas>
+                    <canvas id="day_chart" style="position: absolute; width: 90%; height: 400px;" class="px-3"></canvas>
+                    <div id="chartloadscreen" style="position: absolute; width: 90%; height: 250px; vertical-align: baseline; font-size: 48px; text-align: center;" class="px-3">
+                        <p style="margin: 101px 0px 101px 0px;">Chart is loading</p>
+                    </div>
                     <!--Important stock info-->
-                    <div class="spacer" style="width:100%; height: 300px;"></div>
+                    <div id="chart_about_spacer" class="spacer" style="width:100%; height: 457px;"></div>
                     <div class="card" style="width: 92%; margin: auto; height: auto;">
                         <div class="card-header">
                             <strong>About the stock</strong>

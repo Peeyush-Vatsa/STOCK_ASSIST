@@ -73,11 +73,13 @@ def fetch_intraday_prices(ticker):
         include_docs=True,
     ).get_result()
     all_docs = response['rows']
-    intra_prices = {}
+    intra_prices_reverse = {}
     for doc in all_docs:
         try:
             p = doc['doc']['price'][ticker]
             t = doc['doc']['_id']
+            if  (not (t.endswith('0') or t.endswith('5'))):
+                continue
             min = int(t.split(':')[1])
             hr = int(t.split(':')[0])
             carry = 0
@@ -89,13 +91,13 @@ def fetch_intraday_prices(ticker):
                 hr = hr + 5 + carry
             else:
                 hr = hr + 4 + carry
-            
-            print(p)
-            print(doc['doc'])
-            intra_prices[str(hr)+':'+str(min)] = p
+            if (hr > 15) or (hr == 15 and min >31):
+                break
+            hr = str(hr)
+            if min in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]:
+                min = '0'+str(min)
+            intra_prices_reverse[str(hr)+':'+str(min)] = p
                 
         except: 
             continue
-    return intra_prices
-
-print(fetch_intraday_prices('IDEA.NS'))
+    return intra_prices_reverse

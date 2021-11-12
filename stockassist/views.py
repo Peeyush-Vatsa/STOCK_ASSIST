@@ -4,7 +4,7 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
 import django.contrib.auth as auth
 
-from stockassist.cloudant_connect import fetch_current_prices, get_open_prices
+from stockassist.cloudant_connect import fetch_current_prices, fetch_intraday_prices, get_open_prices
 from stockassist.stock_operations import fetch_quote, is_market_open
 from .ajax_templates import add_stock_to_db, remove_stock_from_db, search, topStocks, update_price_in_local_db
 from stockassist.models import watchlist_stocks_current
@@ -159,7 +159,8 @@ def stock_info_module(request):
     if request.method == 'GET':
         stock = (request.GET['stock']).format('.')
         data = fetch_quote(stock)
-        return JsonResponse({'fundamental':data})
+        chart_dataset = fetch_intraday_prices(stock)
+        return JsonResponse({'fundamental':data, 'chart_data': chart_dataset})
     else:
         error(request, message='Looks like you wandered off')
 
