@@ -13,16 +13,11 @@ const swap_stock_symbol_reverse = (st) => {
 }
 //TODO:
 
-//1. Reduce or compress datapoints
-//2. Add support for changing color w.r.t price change
 //3. Add a huge price block below the chart
-//4. Add support for retrieving other datapoints when intraday data is too small furthur in the day
-//5. Update open price algo for preventing prevoius open at weekends (Update microservice architecture)
+//4. Add support for retrieving other datapoints when intraday data is too small furthur in the day (No data)
 //6. Add support for invested in
-
-//Green : (0,128,0,1)
-//Blue: (100,149,237)
-//Red: (178, 34, 34)
+//7.Improve code readability
+//8. Add continous update to price charts
 
 var intradayChart;
 const plotChart = (xDataset, yDataset, colorset) => {
@@ -40,6 +35,11 @@ const plotChart = (xDataset, yDataset, colorset) => {
         },
         options: {
             legend: {display: false},
+            plugins: {
+                tooltip: {
+                    displayColors: false
+                }
+            }
 
         }
     });
@@ -48,7 +48,7 @@ const plotChart = (xDataset, yDataset, colorset) => {
 
 const fetch_stock_info = (stock) => {
     const stock_short = swap_stock_symbol_reverse(stock);
-    //Add loadbox support
+    $("#stock_info_name").removeClass($("#stock_info_name").attr('class')).addClass(stock);
     $("#infoerrorbox").hide();
     $("#infoloadmessage").html("<span class='spinner-border spinner-border-sm'></span> Getting details for "+stock);
     $("#infoloadbox").slideDown(500);
@@ -104,7 +104,6 @@ $('document').ready(() => {
     setTimeout(() => {
         const stock = $("#stock_info_name").attr('class');
         const stock_short = swap_stock_symbol_reverse(stock);
-        //Add load box
         $("#infoloadmessage").html("<span class='spinner-border spinner-border-sm'></span> Getting details for "+stock);
         $("#infoloadbox").slideDown(500);
         $("#breakbox").slideDown(500);
@@ -127,6 +126,8 @@ $('document').ready(() => {
                     ydataset.push(chart_dataset[key]);
                 }
                 let stock_with_backslash = stock.replace('.', '\\.');
+                const stock_price, stock_color, stock_change;
+                //Continue from here
                 const stock_direction = $("#watchlist_arrow_"+stock_with_backslash).html();
                 let colorset = 'rgba(100, 149, 237, 1.0)';
                 if (stock_direction == 'arrow_upward'){
