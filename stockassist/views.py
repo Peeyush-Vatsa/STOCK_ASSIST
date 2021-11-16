@@ -164,5 +164,12 @@ def stock_info_module(request):
     else:
         error(request, message='Looks like you wandered off')
 
-def error(request, message):
+def stockChartDataDaily(request, stock):
+    if request.method == 'GET':
+        #Add alphavantage fetch api
+        pass
+    else:
+        error(request, message='Looks like you wandered off')
+
+def error(request, message=''):
     return render(request, 'stockassist/error.html', {'errormessage': message})

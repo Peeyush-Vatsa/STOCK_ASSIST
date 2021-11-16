@@ -1,4 +1,4 @@
-//Javascript
+//Update to add support for jquery
 function changeVis() {
     pwd = document.getElementById("pwd");
     pwdToggle = document.getElementById("togglePwdIcon");
