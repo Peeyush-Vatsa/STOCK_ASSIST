@@ -1,7 +1,7 @@
-//Prepare data entry here and in index
-//Declaring global access var
-
 const swap_stock_symbol_reverse = (st) => {
+    /*
+        This function is to change the stock extension to be compatible with the server extension
+    */
     let stock = '';
     if (st.endsWith('.BSE')){
         stock = st.replace('.BSE', '{}BO');
@@ -13,14 +13,14 @@ const swap_stock_symbol_reverse = (st) => {
 }
 //TODO:
 
-//3. Add a huge price block below the chart
 //4. Add support for retrieving other datapoints when intraday data is too small furthur in the day (No data)
 //6. Add support for invested in
-//7.Improve code readability
-//8. Add continous update to price charts
-
+//7. Improve code readability
+//8. Add full support for responsive design
+//Creating a global variable for the chart in info_display
 var intradayChart;
 const plotChart = (xDataset, yDataset, colorset) => {
+    //Plots the chart
     intradayChart = new Chart("day_chart", {
         type: 'line',
         data: {
@@ -75,6 +75,12 @@ const fetch_stock_info = (stock) => {
                 ydataset.push(chart_dataset[key]);
             }
             let stock_with_backslash = stock.replace('.', '\\.');
+            const stock_price = $("#watchlist_price_"+stock_with_backslash).text();
+            const stock_color = $("#watchlist_"+stock_with_backslash).css('color');
+            const stock_change = $("#watchlist_netchange_"+stock_with_backslash).text();
+            $("#info_price_box").css('color', stock_color);
+            $("#info_price").text(stock_price);
+            $("#info_price_netchange").text("  "+stock_change);    
             const stock_direction = $("#watchlist_arrow_"+stock_with_backslash).html();
             let colorset = 'rgba(100, 149, 237, 1.0)';
             if (stock_direction == 'arrow_upward'){
@@ -126,8 +132,12 @@ $('document').ready(() => {
                     ydataset.push(chart_dataset[key]);
                 }
                 let stock_with_backslash = stock.replace('.', '\\.');
-                const stock_price, stock_color, stock_change;
-                //Continue from here
+                const stock_price = $("#watchlist_price_"+stock_with_backslash).text();
+                const stock_color = $("#watchlist_"+stock_with_backslash).css('color');
+                const stock_change = $("#watchlist_netchange_"+stock_with_backslash).text();
+                $("#info_price_box").css('color', stock_color);
+                $("#info_price").text(stock_price);
+                $("#info_price_netchange").text("  "+stock_change);
                 const stock_direction = $("#watchlist_arrow_"+stock_with_backslash).html();
                 let colorset = 'rgba(100, 149, 237, 1.0)';
                 if (stock_direction == 'arrow_upward'){

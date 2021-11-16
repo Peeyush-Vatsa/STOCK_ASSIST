@@ -22,7 +22,7 @@ def homepage(request):
         if request.user.is_authenticated:
             context['market_open'] = is_market_open()
             current_stock_price = fetch_current_prices()
-            update_price_in_local_db(current_stock_price, request.user.username)
+            update_price_in_local_db(current_stock_price['prices'], request.user.username)
             my_stocks = watchlist_stocks_current.objects.filter(watchlist_user = request.user.username)
             context['watchlist_stocks'] = my_stocks
         return render(request, 'stockassist/index.html', context=context)
@@ -146,7 +146,7 @@ def get_stock_price(request):
             return JsonResponse({'market':'closed'})
         else:
             current_stock_price = fetch_current_prices()
-            return JsonResponse({'market':'open', 'prices': current_stock_price})
+            return JsonResponse({'market':'open', 'prices': current_stock_price['prices'], 'time': current_stock_price['time']})
 
 def fetch_open_market_price(request):
     if request.method == 'GET':

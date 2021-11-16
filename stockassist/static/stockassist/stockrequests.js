@@ -105,8 +105,13 @@ $('document').ready(()=> {
                 else{
                     $("#market_status").html('<p class="text-success">Market is open</p>');
                     const market_prices = response.prices;
+                    const info_stock = $("#stock_info_name").attr('class');
                     for (let st in market_prices){
+                        let stock_is_info_stock = false;
                         let stock = swap_stock_symbol(st);
+                        if (stock.replace('\\.', '.') == info_stock){
+                            stock_is_info_stock = true;
+                        }
                         try{
                             $(("#watchlist_price_"+stock).toString()).html(market_prices[st].toFixed(2).toString());
                             try{
@@ -117,25 +122,40 @@ $('document').ready(()=> {
                                 var open_price = sessionStorage.getItem(st);
                             }
                             let netchange = get_difference(Number(open_price), Number(market_prices[st]));
+                            if (stock_is_info_stock == true){
+                                $("#info_price").text(market_prices[st].toFixed(2).toString());
+                                $("#info_price_netchange").text(netchange);
+                            }
                             if (Number(open_price) > Number(market_prices[st])){
                                 $("#watchlist_arrow_"+stock).text("arrow_downward");
                                 $("#watchlist_"+stock).css('color', 'firebrick').slideUp(500).slideDown(500);
                                 $("#watchlist_netchange_"+stock).css('color', 'tomato').slideUp(500).text(netchange).slideDown(500);
+                                if (stock_is_info_stock == true){
+                                    $("#info_price_box").css('color', 'firebrick');
+                                }
                             }
                             else if (Number(open_price) < Number(market_prices[st])){
                                 $("#watchlist_arrow_"+stock).text("arrow_upward");
                                 $("#watchlist_"+stock).css('color', 'green').slideUp(500).slideDown(500);
                                 $("#watchlist_netchange_"+stock).css('color', 'darkgreen').slideUp(500).text(netchange).slideDown(500);
+                                if (stock_is_info_stock == true){
+                                    $("#info_price_box").css('color', 'green');
+                                    console.log("Preparing to append chart for arrow_up");
+                                }
                             }
                             else{
                                 $("#watchlist_arrow_"+stock).text("remove");
                                 $("#watchlist_"+stock).css('color', 'cornflowerblue').slideUp(500).slideDown(500);
-                                $("#watchlist_netchange_"+stock).css('color', 'cadetblue').slideUp(500).text(netchange).slideDown(500);    
+                                $("#watchlist_netchange_"+stock).css('color', 'cadetblue').slideUp(500).text(netchange).slideDown(500); 
+                                if (stock_is_info_stock == true){
+                                    $("#info_price_box").css('color', 'cornflowerblue');
+                                }   
                             }
                         }
                         catch{
                             continue;
                         }
+                        
                     }
                 }
             },

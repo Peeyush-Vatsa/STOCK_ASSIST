@@ -48,7 +48,22 @@ def fetch_current_prices():
         ).get_result()
     try:
         prices = response['rows'][0]['doc']['price']
-        return prices
+        t = response['rows'][0]['doc']['_id']
+        min = int(t.split(':')[1])
+        hr = int(t.split(':')[0])
+        carry = 0
+        min = min + 30
+        if min > 59:
+            min = min - 60
+            carry = 1
+        if time.gmtime().tm_isdst == 0:
+            hr = hr + 5 + carry
+        else:
+            hr = hr + 4 + carry
+        hr = str(hr)
+        if min in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]:
+            min = '0'+str(min)    
+        return {'prices':prices, 'time': str(hr) + ':' + str(min)}
     except IndexError:
         time.sleep(1)
         fetch_current_prices()
@@ -96,7 +111,7 @@ def fetch_intraday_prices(ticker):
             hr = str(hr)
             if min in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]:
                 min = '0'+str(min)
-            intra_prices_reverse[str(hr)+':'+str(min)] = p
+            intra_prices_reverse[str(hr) + ':' + str(min)] = p
                 
         except: 
             continue
