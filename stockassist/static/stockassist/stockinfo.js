@@ -17,10 +17,13 @@ const swap_stock_symbol_reverse = (st) => {
 //6. Add support for invested in
 //7. Improve code readability
 //8. Add full support for responsive design
+
 //Creating a global variable for the chart in info_display
 var intradayChart;
 const plotChart = (xDataset, yDataset, colorset) => {
-    //Plots the chart
+    /*
+        Plots the chart with the provided datapoints
+    */
     intradayChart = new Chart("day_chart", {
         type: 'line',
         data: {
@@ -46,6 +49,25 @@ const plotChart = (xDataset, yDataset, colorset) => {
     intradayChart.resize();
 }
 
+const updateInfoChart = (time, price) => {
+    if (!(time.endsWith('1') || time.endsWith('6'))){
+        intradayChart.data.labels.pop();
+        intradayChart.data.datasets.forEach((dataset) => {
+            dataset.data.pop();
+        });
+    }
+    intradayChart.data.labels.push(time);
+    intradayChart.data.datasets.forEach((dataset) => {
+        dataset.data.push(price);
+    });
+    intradayChart.update();
+}
+const updateInfoChartColor = (color) => {
+    intradayChart.data.datasets.forEach((dataset) => {
+        dataset.borderColor = color;
+    });
+    intradayChart.update();
+}
 const fetch_stock_info = (stock) => {
     const stock_short = swap_stock_symbol_reverse(stock);
     $("#stock_info_name").removeClass($("#stock_info_name").attr('class')).addClass(stock);

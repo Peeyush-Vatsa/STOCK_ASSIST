@@ -125,13 +125,15 @@ $('document').ready(()=> {
                             if (stock_is_info_stock == true){
                                 $("#info_price").text(market_prices[st].toFixed(2).toString());
                                 $("#info_price_netchange").text(netchange);
+                                updateInfoChart(response.time, market_prices[st]);
                             }
                             if (Number(open_price) > Number(market_prices[st])){
                                 $("#watchlist_arrow_"+stock).text("arrow_downward");
                                 $("#watchlist_"+stock).css('color', 'firebrick').slideUp(500).slideDown(500);
                                 $("#watchlist_netchange_"+stock).css('color', 'tomato').slideUp(500).text(netchange).slideDown(500);
                                 if (stock_is_info_stock == true){
-                                    $("#info_price_box").css('color', 'firebrick');
+                                    $("#info_price_box").slideUp(500).css('color', 'firebrick').slideDown(500);
+                                    updateInfoChartColor('rgba(178,34,34,1.0)');
                                 }
                             }
                             else if (Number(open_price) < Number(market_prices[st])){
@@ -139,8 +141,8 @@ $('document').ready(()=> {
                                 $("#watchlist_"+stock).css('color', 'green').slideUp(500).slideDown(500);
                                 $("#watchlist_netchange_"+stock).css('color', 'darkgreen').slideUp(500).text(netchange).slideDown(500);
                                 if (stock_is_info_stock == true){
-                                    $("#info_price_box").css('color', 'green');
-                                    console.log("Preparing to append chart for arrow_up");
+                                    $("#info_price_box").slideUp(500).css('color', 'green').slideDown(500);
+                                    updateInfoChartColor('rgba(0,128,0,1.0)');
                                 }
                             }
                             else{
@@ -148,7 +150,8 @@ $('document').ready(()=> {
                                 $("#watchlist_"+stock).css('color', 'cornflowerblue').slideUp(500).slideDown(500);
                                 $("#watchlist_netchange_"+stock).css('color', 'cadetblue').slideUp(500).text(netchange).slideDown(500); 
                                 if (stock_is_info_stock == true){
-                                    $("#info_price_box").css('color', 'cornflowerblue');
+                                    $("#info_price_box").slideUp(500).css('color', 'cornflowerblue').slideDown(500);
+                                    updateInfoChartColor('rgba(100, 149, 237, 1.0)');
                                 }   
                             }
                         }
