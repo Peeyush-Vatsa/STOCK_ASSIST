@@ -13,10 +13,9 @@ const swap_stock_symbol_reverse = (st) => {
 }
 //TODO:
 
-//4. Add support for retrieving other datapoints when intraday data is too small furthur in the day (No data)
-//6. Add support for invested in
-//7. Improve code readability
-//8. Add full support for responsive design
+//4. Add support for retrieving other datapoints when intraday data is too small furthur in the day (No data) - 3
+//6. Add support for invested in - 4
+//7. Improve code readability - 2
 
 //Creating a global variable for the chart in info_display
 var intradayChart;
