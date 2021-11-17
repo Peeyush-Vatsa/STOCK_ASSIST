@@ -1,1 +1,1 @@
-web: gunicorn djangobackend.wsgi
+web: gunicorn Stock_Assist.wsgi
