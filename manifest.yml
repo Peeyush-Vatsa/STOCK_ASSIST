@@ -1,0 +1,12 @@
+applications:
+  - name: stockassistant
+    routes:
+      - route: stockassist-pvatsa.eu-gb.mybluemix.net
+    memory: 128M
+    buildpack: python_buildpack
+  - name: stockassistant-nginx
+    routes:
+      - route: stockassist-pvatsa.eu-gb.mybluemix.net/static
+    memory: 64M
+    buildpack: staticfile_buildpack
+

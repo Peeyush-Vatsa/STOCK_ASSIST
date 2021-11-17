@@ -1,0 +1,38 @@
+#search_field {
+    display: block;
+    margin: auto;
+    position: relative;
+    width: 30%;
+    border-style: solid ;
+    border-radius: 10px;
+}
+#search_results {
+    display: none;
+    position: relative;
+    width: 60%;
+    height: auto;
+    margin: auto;
+    overflow: scroll;
+}
+
+.stk_symbol{
+    text-align: center;
+    color: darkblue;
+}
+.cmpny_nme{
+    text-align: center;
+    color: darkgreen;
+}
+.info_panel{
+    position: relative;
+    width: 69%;
+    float: right;
+    height: 1100px;
+    overflow: auto;
+}
+.watchlist{
+    position: relative;
+    width: 30%;
+    float: left;
+    height: auto;
+}
