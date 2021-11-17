@@ -53,6 +53,7 @@ const updateInfoChart = (time, price) => {
 
         ! - Pops values on first fetch
     */
+   
     if (!(time.endsWith('1') || time.endsWith('6'))){
         //Pops value to ensure its not permanent
         intradayChart.data.labels.pop();

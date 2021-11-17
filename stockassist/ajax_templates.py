@@ -169,16 +169,3 @@ def update_price_in_local_db(prices, uname):
             row.save()
         except:
             break
-'''
-def fetch_month_price(ticker):
-    stock_split = ticker.split('.')
-    if stock_split[1] == '.NS':
-        ticker = stock_split[0]+ '.NSE'
-    else:
-        ticker = stock_split[0]+ '.BSE'
-    url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='+ticker+'&apikey='+str(os.environ.get('ALPHAAPI'))
-    r = requests.get(url)
-    data = r.json()
-    #Append for a month only
-    print(data)
-'''

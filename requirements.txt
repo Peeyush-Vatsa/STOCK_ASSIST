@@ -8,6 +8,7 @@ cssselect==1.1.0
 Django==3.2.7
 fake-useragent==0.1.11
 feedparser==6.0.8
+gunicorn==20.1.0
 ibm-cloud-sdk-core==3.11.3
 ibmcloudant==0.0.37
 idna==3.2

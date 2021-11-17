@@ -171,5 +171,8 @@ def stockChartDataDaily(request, stock):
     else:
         error(request, message='Looks like you wandered off')
 
+def add_to_portfolio(request):
+    pass
+
 def error(request, message=''):
     return render(request, 'stockassist/error.html', {'errormessage': message})
