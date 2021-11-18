@@ -2,12 +2,14 @@ from dotenv import load_dotenv
 import os
 import time
 load_dotenv()
-CLOUDANT_URL = os.environ.get('CLOUDANT_URL')
-CLOUDANT_APIKEY='<varname>'+str(os.environ.get('CLOUDANT_APIKEY'))+'</varname>'
 
 from ibmcloudant.cloudant_v1 import CloudantV1, Document
+from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 
-service = CloudantV1.new_instance(service_name='CLOUDANT')
+authenticator = IAMAuthenticator(str(os.environ.get('CLOUDANT_APIKEY')))
+
+service = CloudantV1(authenticator=authenticator)
+service.set_service_url(str(os.environ.get('CLOUDANT_URL')))
 
 def get_stocks():
     response = service.post_all_docs(
