@@ -182,9 +182,11 @@ $('document').ready(() => {
                 stock: stock_short,
             },
             success: (response) => {
-                const fundamentals = response.fundamental;
-                for (at in fundamentals){
-                    $("#"+at).text(fundamentals[at]);
+                if (stock != '^BSESN'){
+                    const fundamentals = response.fundamental;
+                    for (at in fundamentals){
+                        $("#"+at).text(fundamentals[at]);
+                    }
                 }
                 const chart_dataset = response.chart_data;
                 const xDataset = [];
@@ -193,21 +195,38 @@ $('document').ready(() => {
                     xDataset.push(key);
                     ydataset.push(chart_dataset[key]);
                 }
-                let stock_with_backslash = stock.replace('.', '\\.');
-                const stock_price = $("#watchlist_price_"+stock_with_backslash).text();
-                const stock_color = $("#watchlist_"+stock_with_backslash).css('color');
-                const stock_change = $("#watchlist_netchange_"+stock_with_backslash).text();
-                $("#info_price_box").css('color', stock_color);
-                $("#info_price").text(stock_price);
-                $("#info_price_netchange").text("  "+stock_change);
-                const stock_direction = $("#watchlist_arrow_"+stock_with_backslash).html();
-                let colorset = 'rgba(100, 149, 237, 1.0)';
-                if (stock_direction == 'arrow_upward'){
-                    colorset = 'rgba(0,128,0,1.0)';
+                if (stock != '^BSESN'){
+                    let stock_with_backslash = stock.replace('.', '\\.');
+                    const stock_price = $("#watchlist_price_"+stock_with_backslash).text();
+                    const stock_color = $("#watchlist_"+stock_with_backslash).css('color');
+                    const stock_change = $("#watchlist_netchange_"+stock_with_backslash).text();
+                    $("#info_price_box").css('color', stock_color);
+                    $("#info_price").text(stock_price);
+                    $("#info_price_netchange").text("  "+stock_change);
+                    const stock_direction = $("#watchlist_arrow_"+stock_with_backslash).html();
+                    var colorset = 'rgba(100, 149, 237, 1.0)';
+                    if (stock_direction == 'arrow_upward'){
+                        colorset = 'rgba(0,128,0,1.0)';
+                    }
+                    else if (stock_direction == 'arrow_downward'){
+                        colorset = 'rgba(178,34,34,1.0)';
+                    }  
                 }
-                else if (stock_direction == 'arrow_downward'){
-                    colorset = 'rgba(178,34,34,1.0)';
-                }    
+                else{
+                    colorset = 'rgba(100, 149, 237, 1.0)';
+                    let netchange = ydataset[ydataset.length - 1] - ydataset[ydataset.length -2];
+                    let color = "cornflowerblue";
+                    if (netchange > 0){
+                        color = "green";
+                        colorset = 'rgba(0,128,0,1.0)';
+                    }
+                    else if (netchange < 0){
+                        color = 'firebrick';
+                        colorset = 'rgba(178,34,34,1.0)';
+                    }
+                    $("#info_price_box").css('color', color);
+                    $("#info_price").text(((ydataset[ydataset.length - 1]).toFixed(2)).toString());
+                }  
                 $("#chartloadscreen").fadeOut(500);
                 plotChart(xDataset, ydataset, colorset);    
                 $("#infoloadbox").slideUp(500);
