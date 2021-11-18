@@ -146,6 +146,8 @@ def remove_stock_from_db(stock):
 
 def update_price_in_local_db(prices, uname):
     for key in prices:
+        if key == '^BSESN':
+            continue
         if key.split('.')[1] == 'NS':
             key_formatted=key.split('.')[0]+'.NSE'
         else:

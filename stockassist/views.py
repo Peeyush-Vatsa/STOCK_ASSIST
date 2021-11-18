@@ -158,7 +158,9 @@ def fetch_open_market_price(request):
 def stock_info_module(request):
     if request.method == 'GET':
         stock = (request.GET['stock']).format('.')
-        data = fetch_quote(stock)
+        data = {}
+        if stock != '^BSESN':
+            data = fetch_quote(stock)
         chart_dataset = fetch_intraday_prices(stock)
         return JsonResponse({'fundamental':data, 'chart_data': chart_dataset})
     else:
