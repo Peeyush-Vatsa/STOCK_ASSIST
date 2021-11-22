@@ -23,7 +23,7 @@
                     <span class="nav-item px-3 py-2 flex-fill">
                         <span class="dropdown float-right">
                             <a href="#" class="nav-link dropdown-toggle" id="userdropdown" data-toggle="dropdown">Welcome, {{user.first_name}}</a>
-                            <div class="dropdown-menu">
+                            <div class="dropdown-menu px-1">
                                 <a href="{%url 'stockassist:logout'%}" class="btn btn-outline-danger btn-block btn-sm">Logout</a>
                             </div>
                         </span>
@@ -94,7 +94,7 @@
                     <!--Stocks in watchlist-->
                     <ul class="list-group stock-card" style="border-style: solid none none none; border-width: 2px;">
                         {%for stock in watchlist_stocks%}
-                            <li class="list-group-item">
+                            <li class="list-group-item myWatchlist" id="watchcontainer_{{stock.stk_symbol}}">
                                 <div>
                                     <span style="float: left;">
                                         <strong>{{stock.stk_symbol}}</strong>
@@ -170,12 +170,30 @@
                 </div>
                 <!--Info container-->
                 <div style="width: 100%; align-content: center; position: absolute;">
-                    <!--Chart-->
+                    <!--Chart-->                    
                     <canvas id="day_chart" style="position: relative; width: 90%;" class="px-3"></canvas>
-                    <!--Load chart display-->
-                    <div id="chartloadscreen" style="position: absolute; width: 90%; height: 250px; vertical-align: baseline; font-size: 57px; text-align: center;" class="px-3">
-                        <p style="margin: 180px 0px 200px 0px; text-align: center;">Chart is loading</p>
-                    </div>
+                    <!--Stock price display options-->
+                    <br>
+                    <ul class="nav nav-pills nav-justified" style="width: 80%; margin: auto; display: none;" id="chart_options">
+                        <li class="nav-item">
+                          <a class="nav-link active bg-secondary" href="javascript:void(0)">1D</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link text-secondary" href="javascript:void(0)">1M</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link text-secondary" href="javascript:void(0)">3M</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link text-secondary" href="javascript:void(0)">6M</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary" href="javascript:void(0)">1Y</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary" href="javascript:void(0)">MAX</a>
+                        </li>
+                    </ul>
                     <!--Price info-->
                     <div style="position: absolute; height: 50px; width: 92%; margin: auto;" id="info_price_box" class="px-5">
                         <span style="font-size: 40px;" id="info_price"></span>
@@ -184,7 +202,7 @@
                     <div class="spaer" style="width: 100%; height: 60px;"></div>
                     <!--Important stock info-->
                     {%if watchlist_stocks.0%}
-                    <div class="card" style="width: 92%; margin: auto; height: auto;">
+                    <div class="card shadow-md" style="width: 92%; margin: auto; height: auto;">
                         <div class="card-header">
                             <strong>About the stock</strong>
                         </div>

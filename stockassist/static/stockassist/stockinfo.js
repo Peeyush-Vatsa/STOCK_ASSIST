@@ -93,8 +93,6 @@ const fetch_stock_info = (stock) => {
     $("#infoloadbox").slideDown(500);
     //Slides down the breakbox to prevent overlap
     $("#breakbox").slideDown(500);
-    //Adds display to show chart is loading
-    $("#chartloadscreen").fadeIn(500);
     //Destroys current chart to prepare for a new one
     intradayChart.destroy();
     //Sends ajax request to server for relavant info
@@ -146,8 +144,6 @@ const fetch_stock_info = (stock) => {
             else if (stock_direction == 'arrow_downward'){
                 colorset = 'rgba(178,34,34,1.0)';
             }
-            //Removes teh chart loadscreen
-            $("#chartloadscreen").fadeOut(500);
             //Plots the chart
             plotChart(xDataset, ydataset, colorset);   
             //Removes loading elements 
@@ -227,8 +223,8 @@ $('document').ready(() => {
                     $("#info_price_box").css('color', color);
                     $("#info_price").text(((ydataset[ydataset.length - 1]).toFixed(2)).toString());
                 }  
-                $("#chartloadscreen").fadeOut(500);
-                plotChart(xDataset, ydataset, colorset);    
+                plotChart(xDataset, ydataset, colorset);
+                $("#chart_options").fadeIn(500);    
                 $("#infoloadbox").slideUp(500);
                 $("#breakbox").slideUp(500);
                 $("#infoloadmessage").html("");
