@@ -15,7 +15,7 @@ env:
   IBM_CLOUD_API: ${{secrets.IBM_API_KEY}}
   DJANGO_SECRET: ${{secrets.DJANGO_SECRET_KEY}}
   IBM_CLOUDANT_API: ${{secrets.IBM_CLOUDANT_API}}
-  IBM_CLOUDANT_URL: ${{secrets.IBM_CLOUDANYT_URL}}
+  IBM_CLOUDANT_URL: ${{secrets.IBM_CLOUDANT_URL}}
 
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -33,7 +33,7 @@ jobs:
         run: cd stockassist && touch .env && cat .env >> CLOUDANT_APIKEY=$IBM_CLOUDANT_API\nCLOUDANT_URL=$IBM_CLOUDNT_URL
       
       - name: Adding relavant env files - 2
-        run: cd ../Stock_Assist && touch .env && cat .env >> DJANGO_SECRET_KEY="$DJANGO_SECRET" && cd ..
+        run: cd .. && cd Stock_Assist && touch .env && cat .env >> DJANGO_SECRET_KEY="$DJANGO_SECRET" && cd ..
         
       - name: Initialise IBM Cloud CLI
         run: |
