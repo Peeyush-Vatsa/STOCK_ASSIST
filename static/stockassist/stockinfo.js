@@ -53,29 +53,32 @@ const updateInfoChart = (time, price) => {
 
         ! - Pops values on first fetch
     */
-   
-    if (!(time.endsWith('1') || time.endsWith('6'))){
-        //Pops value to ensure its not permanent
-        intradayChart.data.labels.pop();
+    if ($("#1D").attr('class').includes('active') == true){
+        if (!(time.endsWith('1') || time.endsWith('6'))){
+            //Pops value to ensure its not permanent
+            intradayChart.data.labels.pop();
+            intradayChart.data.datasets.forEach((dataset) => {
+                dataset.data.pop();
+            });
+        }
+        //Pushes stock data into stock
+        intradayChart.data.labels.push(time);
         intradayChart.data.datasets.forEach((dataset) => {
-            dataset.data.pop();
+            dataset.data.push(price);
         });
+        intradayChart.update();
     }
-    //Pushes stock data into stock
-    intradayChart.data.labels.push(time);
-    intradayChart.data.datasets.forEach((dataset) => {
-        dataset.data.push(price);
-    });
-    intradayChart.update();
 }
 const updateInfoChartColor = (color) => {
     /*
         Changes color of the chart if stock direction changes
      */
-    intradayChart.data.datasets.forEach((dataset) => {
-        dataset.borderColor = color;
-    });
-    intradayChart.update();
+    if ($("#1D").attr('class').includes('active') == true){    
+        intradayChart.data.datasets.forEach((dataset) => {
+            dataset.borderColor = color;
+        });
+        intradayChart.update();
+    }
 }
 const fetch_stock_info = (stock) => {
     /* 
@@ -93,8 +96,6 @@ const fetch_stock_info = (stock) => {
     $("#infoloadbox").slideDown(500);
     //Slides down the breakbox to prevent overlap
     $("#breakbox").slideDown(500);
-    //Adds display to show chart is loading
-    $("#chartloadscreen").fadeIn(500);
     //Destroys current chart to prepare for a new one
     intradayChart.destroy();
     //Sends ajax request to server for relavant info
@@ -146,8 +147,6 @@ const fetch_stock_info = (stock) => {
             else if (stock_direction == 'arrow_downward'){
                 colorset = 'rgba(178,34,34,1.0)';
             }
-            //Removes teh chart loadscreen
-            $("#chartloadscreen").fadeOut(500);
             //Plots the chart
             plotChart(xDataset, ydataset, colorset);   
             //Removes loading elements 
@@ -170,6 +169,8 @@ const fetch_stock_info = (stock) => {
 $('document').ready(() => {
     setTimeout(() => {
         /* Similar to the fetch_price function except it only runs once when the document loads */
+        $("#1M").removeClass('active');
+
         const stock = $("#stock_info_name").attr('class');
         const stock_short = swap_stock_symbol_reverse(stock);
         $("#infoloadmessage").html("<span class='spinner-border spinner-border-sm'></span> Getting details for "+stock);
@@ -227,8 +228,8 @@ $('document').ready(() => {
                     $("#info_price_box").css('color', color);
                     $("#info_price").text(((ydataset[ydataset.length - 1]).toFixed(2)).toString());
                 }  
-                $("#chartloadscreen").fadeOut(500);
-                plotChart(xDataset, ydataset, colorset);    
+                plotChart(xDataset, ydataset, colorset);
+                $("#chart_options").fadeIn(500);    
                 $("#infoloadbox").slideUp(500);
                 $("#breakbox").slideUp(500);
                 $("#infoloadmessage").html("");
