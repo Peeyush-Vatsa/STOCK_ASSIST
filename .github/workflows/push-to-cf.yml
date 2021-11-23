@@ -33,7 +33,10 @@ jobs:
         run: cd stockassist && touch .env && cat .env >> CLOUDANT_APIKEY=$IBM_CLOUDANT_API\nCLOUDANT_URL=$IBM_CLOUDNT_URL && cd ..
       
       - name: Adding relavant env files - 2
-        run: ls && cd Stock_Assist && touch .env && cat .env >> DJANGO_SECRET_KEY="$DJANGO_SECRET" && cd ..
+        run: ls && cd Stock_Assist && touch .env && cat .env >> DJANGO_SECRET_KEY="$DJANGO_SECRET"
+    
+      - name: Verifing env
+        run: cat stockassist/.env && cat Stock_Assist.env
         
       - name: Initialise IBM Cloud CLI
         run: |
