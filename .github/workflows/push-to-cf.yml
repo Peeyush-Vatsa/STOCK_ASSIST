@@ -30,10 +30,10 @@ jobs:
       - uses: actions/checkout@v2
       
       - name: Adding relavant env files - 1
-        run: cd stockassist && cat .env >> CLOUDANT_APIKEY=$IBM_CLOUDANT_API\nCLOUDANT_URL=$IBM_CLOUDNT_URL
+        run: cd stockassist && touch .env && cat .env >> CLOUDANT_APIKEY=$IBM_CLOUDANT_API\nCLOUDANT_URL=$IBM_CLOUDNT_URL
       
       - name: Adding relavant env files - 2
-        run: cd ../Stock_Assist && cat .env >> DJANGO_SECRET_KEY="$DJANGO_SECRET" && cd ..
+        run: cd ../Stock_Assist && touch .env && cat .env >> DJANGO_SECRET_KEY="$DJANGO_SECRET" && cd ..
         
       - name: Initialise IBM Cloud CLI
         run: |
