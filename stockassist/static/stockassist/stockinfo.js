@@ -53,29 +53,32 @@ const updateInfoChart = (time, price) => {
 
         ! - Pops values on first fetch
     */
-   
-    if (!(time.endsWith('1') || time.endsWith('6'))){
-        //Pops value to ensure its not permanent
-        intradayChart.data.labels.pop();
+    if ($("#1D").attr('class').includes('active') == true){
+        if (!(time.endsWith('1') || time.endsWith('6'))){
+            //Pops value to ensure its not permanent
+            intradayChart.data.labels.pop();
+            intradayChart.data.datasets.forEach((dataset) => {
+                dataset.data.pop();
+            });
+        }
+        //Pushes stock data into stock
+        intradayChart.data.labels.push(time);
         intradayChart.data.datasets.forEach((dataset) => {
-            dataset.data.pop();
+            dataset.data.push(price);
         });
+        intradayChart.update();
     }
-    //Pushes stock data into stock
-    intradayChart.data.labels.push(time);
-    intradayChart.data.datasets.forEach((dataset) => {
-        dataset.data.push(price);
-    });
-    intradayChart.update();
 }
 const updateInfoChartColor = (color) => {
     /*
         Changes color of the chart if stock direction changes
      */
-    intradayChart.data.datasets.forEach((dataset) => {
-        dataset.borderColor = color;
-    });
-    intradayChart.update();
+    if ($("#1D").attr('class').includes('active') == true){    
+        intradayChart.data.datasets.forEach((dataset) => {
+            dataset.borderColor = color;
+        });
+        intradayChart.update();
+    }
 }
 const fetch_stock_info = (stock) => {
     /* 
@@ -166,6 +169,8 @@ const fetch_stock_info = (stock) => {
 $('document').ready(() => {
     setTimeout(() => {
         /* Similar to the fetch_price function except it only runs once when the document loads */
+        $("#1M").removeClass('active');
+
         const stock = $("#stock_info_name").attr('class');
         const stock_short = swap_stock_symbol_reverse(stock);
         $("#infoloadmessage").html("<span class='spinner-border spinner-border-sm'></span> Getting details for "+stock);

@@ -12,8 +12,8 @@
         <script src="{%static 'stockassist/UI.js'%}"></script>
         <script src="{%static 'stockassist/stockrequests.js'%}"></script>
         <script src="{%static 'stockassist/stockinfo.js'%}"></script>
-
-        <title>Stock Assistant</title>
+        <script src="{%static 'stockassist/chartassist.js'%}"></script>
+        <title>Stock Assistant (IN)</title>
     </head>
     <body>
         <nav class="navbar navbar-expand-sm bg-light">
@@ -173,25 +173,27 @@
                     <!--Chart-->                    
                     <canvas id="day_chart" style="position: relative; width: 90%;" class="px-3"></canvas>
                     <!--Stock price display options-->
-                    <br>
-                    <ul class="nav nav-pills nav-justified" style="width: 80%; margin: auto; display: none;" id="chart_options">
+                    <ul class="nav nav-pills nav-justified py-2" style="width: 90%; margin: auto; display: none;" id="chart_options">
                         <li class="nav-item">
-                          <a class="nav-link active bg-secondary" href="javascript:void(0)">1D</a>
+                          <a class="nav-link active bg-secondary" href="javascript:void(0)" id="1D" onclick="plotStockChart('1D')">1D</a>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link text-secondary" href="javascript:void(0)">1M</a>
+                          <a class="nav-link text-secondary" href="javascript:void(0)" id="1M" onclick="plotStockChart('1M')">1M</a>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link text-secondary" href="javascript:void(0)">3M</a>
+                          <a class="nav-link text-secondary" href="javascript:void(0)" id="3M" onclick="plotStockChart('3M')">3M</a>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link text-secondary" href="javascript:void(0)">6M</a>
+                          <a class="nav-link text-secondary" href="javascript:void(0)" id="6M" onclick="plotStockChart('6M')">6M</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-secondary" href="javascript:void(0)">1Y</a>
+                            <a class="nav-link text-secondary" href="javascript:void(0)" id="1Y" onclick="plotStockChart('1Y')">1Y</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-secondary" href="javascript:void(0)">MAX</a>
+                            <a class="nav-link text-secondary" href="javascript:void(0)" id="5Y" onclick="plotStockChart('5Y')">5Y</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary" href="javascript:void(0)" id="MAX" onclick="plotStockChart('MAX')">MAX</a>
                         </li>
                     </ul>
                     <!--Price info-->
