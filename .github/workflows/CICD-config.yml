@@ -13,7 +13,7 @@ env:
   IBM_CLOUD_SPACE: dev
   IBM_CLOUD_ORG: dev.pvatsa@gmail.com
   MANIFEST_NAME: manifest.yml
-  IBM_CLOUD_API: ${{secrets.IBM_CLOUD_API}}
+  IBM_CLOUD_API: ${{secrets.IBM_API_KEY}}
 
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
