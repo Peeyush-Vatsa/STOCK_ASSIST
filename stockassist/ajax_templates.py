@@ -1,13 +1,10 @@
 import csv
 import random
-import requests
 
 from stockassist.cloudant_connect import add_stock, get_stocks
-from datetime import datetime
 from stockassist.models import watchlist_stocks_current
 from stockassist.stock_operations import get_current_price
 
-import os
 from dotenv import load_dotenv
 load_dotenv()
 

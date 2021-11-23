@@ -1,12 +1,7 @@
 from yahoo_fin import stock_info
 from datetime import datetime
 import numpy as np
-
-
-def get_open_price(stock):
-    start_date = str(datetime.now()).split()[0]
-    inf = stock_info.get_data(stock, start_date=start_date)
-    return np.round(inf.loc[start_date, 'open'], 2)
+import time
 
 def is_market_open():
     #Tuned to GMT +00:00
@@ -46,3 +41,43 @@ def fetch_quote(stock):
         except:
             continue
     return fundamental
+
+def getHistoricalData(stock, period):
+    if (period == 'MAX'):
+        start_date = None
+        interval = '1mo'
+        pass
+    else:
+        cur_time = time.localtime()
+        year,month,date = cur_time.tm_year, cur_time.tm_mon, cur_time.tm_mday
+        interval = '1d'
+        if (period == '1M'):
+            month -= 1
+        elif (period == '3M'):
+            month -= 3
+        elif (period == '6M'):
+            month -=6
+        elif (period == '1Y'):
+            interval = '1wk'
+            year -=1
+        else:
+            interval = '1mo'
+            year -=5
+        if (month < 1):
+            month = 12 + month
+            year -= 1
+        start_date = str(year) + '-' + str(month) + '-' +str(date)
+    dataPoints = stock_info.get_data(stock, start_date=start_date, interval=interval)
+    dataPoints = dataPoints['close']
+    compressedData = {}
+    if ((dataPoints.shape[0]) > 90):
+        extra = round(dataPoints.shape[0]/90)
+        if (extra != 1):
+            for i in range(0, dataPoints.shape[0], extra):
+                key = dataPoints.index[i]
+                t = (key.year, key.month, key.day, 0, 0, 0, key.dayofweek, key.dayofyear, 0)
+                print(time.mktime(t))
+                compressedData[str(time.mktime(t))] = dataPoints.iloc[i]
+    if compressedData == {}:
+        compressedData = dataPoints.to_json()
+    return compressedData

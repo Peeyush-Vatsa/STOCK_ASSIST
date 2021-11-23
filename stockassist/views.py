@@ -1,3 +1,4 @@
+from json.decoder import JSONDecodeError
 from django.contrib.auth import models
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
@@ -5,7 +6,7 @@ from django.contrib.auth.models import User
 import django.contrib.auth as auth
 
 from stockassist.cloudant_connect import fetch_current_prices, fetch_intraday_prices, get_open_prices
-from stockassist.stock_operations import fetch_quote, is_market_open
+from stockassist.stock_operations import fetch_quote, getHistoricalData, is_market_open
 from .ajax_templates import add_stock_to_db, remove_stock_from_db, search, topStocks, update_price_in_local_db
 from stockassist.models import watchlist_stocks_current
 
@@ -166,10 +167,13 @@ def stock_info_module(request):
     else:
         error(request, message='Looks like you wandered off')
 
-def stockChartDataDaily(request, stock):
+def stockChartData(request):
     if request.method == 'GET':
-        #Add alphavantage fetch api
-        pass
+        if (request.GET['period'] == '1D'):
+            dataPoints = fetch_intraday_prices(request.GET['stock'])
+        else:
+            dataPoints = getHistoricalData(request.GET['stock'], request.GET['period'])
+        return JsonResponse(dataPoints)
     else:
         error(request, message='Looks like you wandered off')
 
