@@ -1,0 +1,52 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI/CD pipeline
+
+# Controls when the workflow will run
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+env:
+  IBM_CLOUD_REGION: eu-gb
+  IBM_CLOUD_GROUP: Default
+  IBM_CLOUD_SPACE: dev
+  IBM_CLOUD_ORG: dev.pvatsa@gmail.com
+  MANIFEST_NAME: manifest.yml
+  IBM_CLOUD_API: ${{secrets.IBM_CLOUD_API}}
+
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build-and-deploy:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: Initialize IBM Cloud CLI
+        run: |
+          curl -fsSL https://clis.cloud.ibm.com/install/linux | sh
+          ibmcloud --version
+          ibmcloud config --check-version=false
+        shell: bash
+
+      # Runs a set of commands using the runners shell
+      - name: Initialize CF
+        run: ibmcloud install cf -f
+        shell: bash
+        
+      - name: Log in to IBM
+        run: ibmcloud login --apikey "$IBM_CLOUD_API" -r "$IBM_CLOUD_REGION" -g "$IBM_CLOUD_GROUP"
+        shell: bash
+        
+      - name: Target CF
+        run: ibmcloud target -r $IBM_CLOUD_REGION -s $IBM_CLOUD_SPACE -o $IBM_CLOUD_ORG
+        shell: bash
+        
+      - name: Build and Deploy App to CF
+        run: ibmcloud cf push -f $MANIFEST_NAME
+        shell: bash
