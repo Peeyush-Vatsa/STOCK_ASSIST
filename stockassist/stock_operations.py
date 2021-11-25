@@ -47,7 +47,6 @@ def getHistoricalData(stock, period):
     if (period == 'MAX'):
         start_date = None
         interval = '1mo'
-        pass
     else:
         cur_time = time.localtime()
         year,month,date = cur_time.tm_year, cur_time.tm_mon, cur_time.tm_mday
@@ -71,20 +70,20 @@ def getHistoricalData(stock, period):
     dataPoints = stock_info.get_data(stock, start_date=start_date, interval=interval)
     dataPoints = dataPoints['close']
     compressedData = {}
-    if ((dataPoints.shape[0]) > 120):
-        extra = round(dataPoints.shape[0]/120)
+    if ((dataPoints.shape[0]) > 200):
+        extra = round(dataPoints.shape[0]/250)
         if (extra != 1):
             for i in range(0, dataPoints.shape[0], extra):
+                if np.isnan(dataPoints.iloc[i]):
+                    continue
                 key = dataPoints.index[i]
-                t = (key.year, key.month, key.day, 0, 0, 0, key.dayofweek, key.dayofyear, 0)
-                compressedData[str(time.mktime(t))] = dataPoints.iloc[i]
+                d = datetime(key.year, key.month, key.day)
+                compressedData[d.strftime('%d/%m/%Y')] = dataPoints.iloc[i]
     if compressedData == {}:
-        compressedData = json.loads(dataPoints.to_json())
-    if (None in compressedData.values()):
-        removalVals = []
-        for a in compressedData:
-            if compressedData[a] == None:
-                removalVals.append(a)
-        for a in removalVals:
-            compressedData.pop(a)
+        for i in range(dataPoints.shape[0]):
+            if np.isnan(dataPoints.iloc[i]):
+                continue
+            key = dataPoints.index[i]
+            d = datetime(key.year, key.month, key.day)
+            compressedData[d.strftime('%d/%m/%Y')] = dataPoints.iloc[i]
     return compressedData

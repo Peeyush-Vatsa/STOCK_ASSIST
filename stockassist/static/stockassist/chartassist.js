@@ -46,8 +46,7 @@ const plotStockChart = (TIMEPERIOD) => {
                     let xDataset = [];
                     let yDataset = [];
                     for (let time in response){
-                        let date = new Date(Number(time));
-                        xDataset.push(date.getDate().toString() + '/' + date.getMonth().toString()+ '/' + date.getFullYear().toString());
+                        xDataset.push(time);
                         yDataset.push(Number(response[time]).toFixed(2));
                     }
                     let colorset = 'rgba(100, 149, 237, 1.0)';
