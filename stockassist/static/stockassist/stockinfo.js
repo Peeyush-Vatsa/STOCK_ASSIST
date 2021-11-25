@@ -32,7 +32,7 @@ const plotChart = (xDataset, yDataset, colorset, prevCloseData) => {
                 backgroundColor: 'rgba(0,0,0,0)',
                 borderColor: colorset,  //Adds border color to the chart
                 data: yDataset,  //Adds values to y,
-                pointRadius: 1,
+                pointRadius: 0,
             },
             {
                 fill: false,
