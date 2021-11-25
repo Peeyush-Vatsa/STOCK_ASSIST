@@ -170,9 +170,9 @@ def stock_info_module(request):
 def stockChartData(request):
     if request.method == 'GET':
         if (request.GET['period'] == '1D'):
-            dataPoints = fetch_intraday_prices(request.GET['stock'])
+            dataPoints = fetch_intraday_prices(request.GET['stock'].format('.'))
         else:
-            dataPoints = getHistoricalData(request.GET['stock'], request.GET['period'])
+            dataPoints = getHistoricalData(request.GET['stock'].format('.'), request.GET['period'])
         return JsonResponse(dataPoints)
     else:
         error(request, message='Looks like you wandered off')

@@ -18,7 +18,7 @@ const swap_stock_symbol_reverse = (st) => {
 
 //Creating a global variable for the chart in info_display
 var intradayChart;
-const plotChart = (xDataset, yDataset, colorset) => {
+const plotChart = (xDataset, yDataset, colorset, prevCloseData) => {
     /*
         Plots the chart with the provided datapoints xDataset, yDataset and sets the color
     */
@@ -31,7 +31,17 @@ const plotChart = (xDataset, yDataset, colorset) => {
                 lineTension: 0,
                 backgroundColor: 'rgba(0,0,0,0)',
                 borderColor: colorset,  //Adds border color to the chart
-                data: yDataset  //Adds values to y
+                data: yDataset,  //Adds values to y,
+                pointRadius: 1,
+            },
+            {
+                fill: false,
+                lineTension: 0,
+                backgroundColor: 'rgba(0,0,0,0)',
+                borderColor: 'rgba(0,0,0,0.2)',
+                data: prevCloseData,
+                pointRadius: 0,
+                borderDash: [5]
             }]
         },
         options: {
@@ -85,6 +95,14 @@ const fetch_stock_info = (stock) => {
         Fetches relavant information about the stock including the chart data
         Only on clicking a link in the html page
     */
+    if ($("#1D").attr('class').includes('active') == false){
+        dataperiod.forEach((val) => {
+            if ($("#"+val).attr('class').includes('active') == true){
+                $("#"+val).removeClass('active').removeClass('bg-secondary').addClass('text-secondary');
+            }
+        });
+        $("#1D").addClass('active').removeClass('text-secondary').addClass('bg-secondary');
+    }
    //Changes stock extension to be compatible with the server
     const stock_short = swap_stock_symbol_reverse(stock);
     //Preapares to change data in the info_display
@@ -97,7 +115,6 @@ const fetch_stock_info = (stock) => {
     //Slides down the breakbox to prevent overlap
     $("#breakbox").slideDown(500);
     //Destroys current chart to prepare for a new one
-    intradayChart.destroy();
     //Sends ajax request to server for relavant info
     $.ajax({
         type: 'GET',
@@ -117,12 +134,15 @@ const fetch_stock_info = (stock) => {
             }
             //Gets chart dataset
             const chart_dataset = response.chart_data;
+            const prevClose = sessionStorage.getItem(stock_short.replace('{}', '.'));
+            let prevCloseData = []
             const xDataset = [];
             const ydataset = [];
             //Pushes every dataset into relavant arrays
             for (let key in chart_dataset){
                 xDataset.push(key);
                 ydataset.push(chart_dataset[key]);
+                prevCloseData.push(prevClose);
             }
             //Adds backslashes to add support for reading/pushing html/text elements
             let stock_with_backslash = stock.replace('.', '\\.');
@@ -147,8 +167,9 @@ const fetch_stock_info = (stock) => {
             else if (stock_direction == 'arrow_downward'){
                 colorset = 'rgba(178,34,34,1.0)';
             }
+            intradayChart.destroy();
             //Plots the chart
-            plotChart(xDataset, ydataset, colorset);   
+            plotChart(xDataset, ydataset, colorset, prevCloseData);   
             //Removes loading elements 
             $("#infoloadbox").slideUp(500);
             $("#breakbox").slideUp(500);
@@ -169,8 +190,7 @@ const fetch_stock_info = (stock) => {
 $('document').ready(() => {
     setTimeout(() => {
         /* Similar to the fetch_price function except it only runs once when the document loads */
-        $("#1M").removeClass('active');
-
+        
         const stock = $("#stock_info_name").attr('class');
         const stock_short = swap_stock_symbol_reverse(stock);
         $("#infoloadmessage").html("<span class='spinner-border spinner-border-sm'></span> Getting details for "+stock);
@@ -189,12 +209,15 @@ $('document').ready(() => {
                         $("#"+at).text(fundamentals[at]);
                     }
                 }
+                const prevClose = sessionStorage.getItem(stock_short.replace('{}', '.'));
+                let prevCloseData = [];
                 const chart_dataset = response.chart_data;
                 const xDataset = [];
                 const ydataset = [];
                 for (let key in chart_dataset){
                     xDataset.push(key);
                     ydataset.push(chart_dataset[key]);
+                    prevCloseData.push(prevClose);
                 }
                 if (stock != '^BSESN'){
                     let stock_with_backslash = stock.replace('.', '\\.');
@@ -215,7 +238,7 @@ $('document').ready(() => {
                 }
                 else{
                     colorset = 'rgba(100, 149, 237, 1.0)';
-                    let netchange = ydataset[ydataset.length - 1] - ydataset[ydataset.length -2];
+                    let netchange = ydataset[ydataset.length - 1] - prevClose;
                     let color = "cornflowerblue";
                     if (netchange > 0){
                         color = "green";
@@ -228,7 +251,7 @@ $('document').ready(() => {
                     $("#info_price_box").css('color', color);
                     $("#info_price").text(((ydataset[ydataset.length - 1]).toFixed(2)).toString());
                 }  
-                plotChart(xDataset, ydataset, colorset);
+                plotChart(xDataset, ydataset, colorset, prevCloseData);
                 $("#chart_options").fadeIn(500);    
                 $("#infoloadbox").slideUp(500);
                 $("#breakbox").slideUp(500);

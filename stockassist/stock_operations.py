@@ -2,6 +2,7 @@ from yahoo_fin import stock_info
 from datetime import datetime
 import numpy as np
 import time
+import json
 
 def is_market_open():
     #Tuned to GMT +00:00
@@ -70,14 +71,20 @@ def getHistoricalData(stock, period):
     dataPoints = stock_info.get_data(stock, start_date=start_date, interval=interval)
     dataPoints = dataPoints['close']
     compressedData = {}
-    if ((dataPoints.shape[0]) > 90):
-        extra = round(dataPoints.shape[0]/90)
+    if ((dataPoints.shape[0]) > 120):
+        extra = round(dataPoints.shape[0]/120)
         if (extra != 1):
             for i in range(0, dataPoints.shape[0], extra):
                 key = dataPoints.index[i]
                 t = (key.year, key.month, key.day, 0, 0, 0, key.dayofweek, key.dayofyear, 0)
-                print(time.mktime(t))
                 compressedData[str(time.mktime(t))] = dataPoints.iloc[i]
     if compressedData == {}:
-        compressedData = dataPoints.to_json()
+        compressedData = json.loads(dataPoints.to_json())
+    if (None in compressedData.values()):
+        removalVals = []
+        for a in compressedData:
+            if compressedData[a] == None:
+                removalVals.append(a)
+        for a in removalVals:
+            compressedData.pop(a)
     return compressedData
