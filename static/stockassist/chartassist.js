@@ -9,6 +9,9 @@ const plotStockChart = (TIMEPERIOD) => {
         });
         $("#"+TIMEPERIOD).addClass('active').removeClass('text-secondary').addClass('bg-secondary');
         const stock = swap_stock_symbol_reverse($("#stock_info_name").text());
+        $("#infoloadmessage").html("<span class='spinner-border spinner-border-sm'></span> Plotting chart for "+TIMEPERIOD);
+        $("#infoloadbox").slideDown(500);
+        $("#breakbox").slideDown(500);
         $.ajax({
             type: 'GET',
             url: '../ajax/getChartData',
@@ -27,19 +30,28 @@ const plotStockChart = (TIMEPERIOD) => {
                         yDataset.push(response[time]);
                         prevCloseData.push(prevClose);
                     }
-                    const stock_with_backslash = swap_stock_symbol(stock.replace('{}', '.'));
-                    const stock_direction = $("#watchlist_arrow_"+stock_with_backslash).html();
-                    let colorset = 'rgba(100, 149, 237, 1.0)';
-                    //Changes the color of the stock based on stock direction for the chart
-                    console.log(stock_with_backslash)
-                    if (stock_direction == 'arrow_upward'){
-                        colorset = 'rgba(0,128,0,1.0)';
+                    if (xDataset.length < 3){
+                        $("#infoerrormessage").html("Unable to plot intraday chart (Error code 11 - Insufficient data)");
+                        $("#infoerrorbox").slideDown(200).slideUp(2000);
                     }
-                    else if (stock_direction == 'arrow_downward'){
-                        colorset = 'rgba(178,34,34,1.0)';
+                    else {
+                        //Fix algo to include sensex colouring
+                        const stock_with_backslash = swap_stock_symbol(stock.replace('{}', '.'));
+                        const stock_direction = $("#watchlist_arrow_"+stock_with_backslash).html();
+                        let colorset = 'rgba(100, 149, 237, 1.0)';
+                        //Changes the color of the stock based on stock direction for the chart
+                        console.log(stock_with_backslash)
+                        if (stock_direction == 'arrow_upward'){
+                            colorset = 'rgba(0,128,0,1.0)';
+                        }
+                        else if (stock_direction == 'arrow_downward'){
+                            colorset = 'rgba(178,34,34,1.0)';
+                        }
+                        intradayChart.destroy();
+                        plotChart(xDataset, yDataset, colorset, prevCloseData);
+                        $("#infoloadbox").slideUp(500);
+                        $("#breakbox").slideUp(500);
                     }
-                    intradayChart.destroy();
-                    plotChart(xDataset, yDataset, colorset, prevCloseData);
                 }
                 else{
                     //For any other timeperiod
@@ -59,10 +71,14 @@ const plotStockChart = (TIMEPERIOD) => {
                     }
                     intradayChart.destroy();
                     plotChart(xDataset, yDataset, colorset);
+                    $("#infoloadbox").slideUp(500);
+                    $("#breakbox").slideUp(500);
                 }
             },
             error: () => {
-                //WRITE LATER
+                $("#infoloadbox").slideUp(500);
+                $("#infoerrormessage").html("Unable to plot the chart");
+                $("#infoerrorbox").slideDown(500);
             }
         });
     }

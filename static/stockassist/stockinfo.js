@@ -95,6 +95,7 @@ const fetch_stock_info = (stock) => {
         Fetches relavant information about the stock including the chart data
         Only on clicking a link in the html page
     */
+   document.getElementsByClassName('watchlist')[0].scrollIntoView({behavior: 'smooth'});
     if ($("#1D").attr('class').includes('active') == false){
         dataperiod.forEach((val) => {
             if ($("#"+val).attr('class').includes('active') == true){
@@ -144,33 +145,40 @@ const fetch_stock_info = (stock) => {
                 ydataset.push(chart_dataset[key]);
                 prevCloseData.push(prevClose);
             }
-            //Adds backslashes to add support for reading/pushing html/text elements
-            let stock_with_backslash = stock.replace('.', '\\.');
-            //Fetches stock price
-            const stock_price = $("#watchlist_price_"+stock_with_backslash).text();
-            //Gets the color of the stock
-            const stock_color = $("#watchlist_"+stock_with_backslash).css('color');
-            //Gets the netchange in stock price
-            const stock_change = $("#watchlist_netchange_"+stock_with_backslash).text();
-            //Pushes the relavant data into the respective inf display settings
-            $("#info_price_box").css('color', stock_color);
-            $("#info_price").text(stock_price);
-            $("#info_price_netchange").text("  "+stock_change); 
-            //Gets the direction of the stock
-            const stock_direction = $("#watchlist_arrow_"+stock_with_backslash).html();
-            //Sets a default colorset for the chart
-            let colorset = 'rgba(100, 149, 237, 1.0)';
-            //Changes the color of the stock based on stock direction for the chart
-            if (stock_direction == 'arrow_upward'){
-                colorset = 'rgba(0,128,0,1.0)';
+            if (xDataset.length < 3){
+                $("#infoloadbox").slideUp(500);
+                $("#breakbox").slideUp(500);
+                plotStockChart('6M');
             }
-            else if (stock_direction == 'arrow_downward'){
-                colorset = 'rgba(178,34,34,1.0)';
+            else{
+                //Adds backslashes to add support for reading/pushing html/text elements
+                let stock_with_backslash = stock.replace('.', '\\.');
+                //Fetches stock price
+                const stock_price = $("#watchlist_price_"+stock_with_backslash).text();
+                //Gets the color of the stock
+                const stock_color = $("#watchlist_"+stock_with_backslash).css('color');
+                //Gets the netchange in stock price
+                const stock_change = $("#watchlist_netchange_"+stock_with_backslash).text();
+                //Pushes the relavant data into the respective inf display settings
+                $("#info_price_box").css('color', stock_color);
+                $("#info_price").text(stock_price);
+                $("#info_price_netchange").text("  "+stock_change); 
+                //Gets the direction of the stock
+                const stock_direction = $("#watchlist_arrow_"+stock_with_backslash).html();
+                //Sets a default colorset for the chart
+                let colorset = 'rgba(100, 149, 237, 1.0)';
+                //Changes the color of the stock based on stock direction for the chart
+                if (stock_direction == 'arrow_upward'){
+                    colorset = 'rgba(0,128,0,1.0)';
+                }
+                else if (stock_direction == 'arrow_downward'){
+                    colorset = 'rgba(178,34,34,1.0)';
+                }
+                intradayChart.destroy();
+                //Plots the chart
+                plotChart(xDataset, ydataset, colorset, prevCloseData);   
+                //Removes loading elements 
             }
-            intradayChart.destroy();
-            //Plots the chart
-            plotChart(xDataset, ydataset, colorset, prevCloseData);   
-            //Removes loading elements 
             $("#infoloadbox").slideUp(500);
             $("#breakbox").slideUp(500);
             $("#infoloadmessage").html("");
@@ -219,39 +227,46 @@ $('document').ready(() => {
                     ydataset.push(chart_dataset[key]);
                     prevCloseData.push(prevClose);
                 }
-                if (stock != '^BSESN'){
-                    let stock_with_backslash = stock.replace('.', '\\.');
-                    const stock_price = $("#watchlist_price_"+stock_with_backslash).text();
-                    const stock_color = $("#watchlist_"+stock_with_backslash).css('color');
-                    const stock_change = $("#watchlist_netchange_"+stock_with_backslash).text();
-                    $("#info_price_box").css('color', stock_color);
-                    $("#info_price").text(stock_price);
-                    $("#info_price_netchange").text("  "+stock_change);
-                    const stock_direction = $("#watchlist_arrow_"+stock_with_backslash).html();
-                    var colorset = 'rgba(100, 149, 237, 1.0)';
-                    if (stock_direction == 'arrow_upward'){
-                        colorset = 'rgba(0,128,0,1.0)';
-                    }
-                    else if (stock_direction == 'arrow_downward'){
-                        colorset = 'rgba(178,34,34,1.0)';
-                    }  
+                if (xDataset.length < 3){
+                    $("#infoloadbox").slideUp(500);
+                    $("#breakbox").slideUp(500);
+                    plotStockChart('6M');
                 }
-                else{
-                    colorset = 'rgba(100, 149, 237, 1.0)';
-                    let netchange = ydataset[ydataset.length - 1] - prevClose;
-                    let color = "cornflowerblue";
-                    if (netchange > 0){
-                        color = "green";
-                        colorset = 'rgba(0,128,0,1.0)';
+                else {
+                    if (stock != '^BSESN'){
+                        let stock_with_backslash = stock.replace('.', '\\.');
+                        const stock_price = $("#watchlist_price_"+stock_with_backslash).text();
+                        const stock_color = $("#watchlist_"+stock_with_backslash).css('color');
+                        const stock_change = $("#watchlist_netchange_"+stock_with_backslash).text();
+                        $("#info_price_box").css('color', stock_color);
+                        $("#info_price").text(stock_price);
+                        $("#info_price_netchange").text("  "+stock_change);
+                        const stock_direction = $("#watchlist_arrow_"+stock_with_backslash).html();
+                        var colorset = 'rgba(100, 149, 237, 1.0)';
+                        if (stock_direction == 'arrow_upward'){
+                            colorset = 'rgba(0,128,0,1.0)';
+                        }
+                        else if (stock_direction == 'arrow_downward'){
+                            colorset = 'rgba(178,34,34,1.0)';
+                        }  
                     }
-                    else if (netchange < 0){
-                        color = 'firebrick';
-                        colorset = 'rgba(178,34,34,1.0)';
-                    }
-                    $("#info_price_box").css('color', color);
-                    $("#info_price").text(((ydataset[ydataset.length - 1]).toFixed(2)).toString());
-                }  
-                plotChart(xDataset, ydataset, colorset, prevCloseData);
+                    else{
+                        colorset = 'rgba(100, 149, 237, 1.0)';
+                        let netchange = ydataset[ydataset.length - 1] - prevClose;
+                        let color = "cornflowerblue";
+                        if (netchange > 0){
+                            color = "green";
+                            colorset = 'rgba(0,128,0,1.0)';
+                        }
+                        else if (netchange < 0){
+                            color = 'firebrick';
+                            colorset = 'rgba(178,34,34,1.0)';
+                        }
+                        $("#info_price_box").css('color', color);
+                        $("#info_price").text(((ydataset[ydataset.length - 1]).toFixed(2)).toString());
+                    }  
+                    plotChart(xDataset, ydataset, colorset, prevCloseData);
+            }
                 $("#chart_options").fadeIn(500);    
                 $("#infoloadbox").slideUp(500);
                 $("#breakbox").slideUp(500);
