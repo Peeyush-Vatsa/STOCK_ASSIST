@@ -1,6 +1,4 @@
-from json.decoder import JSONDecodeError
-from django.contrib.auth import models
-from django.http.response import HttpResponse, JsonResponse
+from django.http.response import JsonResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
 import django.contrib.auth as auth
