@@ -21,7 +21,13 @@ const plotStockChart = (TIMEPERIOD) => {
             },
             success: (response) => {
                 if (TIMEPERIOD == '1D'){
-                    const prevClose = sessionStorage.getItem(stock.replace('{}', '.'));
+                    let prevClose;
+                    if (stock == 'SENSEX'){
+                        prevClose = sessionStorage.getItem('^BSESN');
+                    }
+                    else{
+                        prevClose = sessionStorage.getItem(stock.replace('{}', '.'));
+                    }
                     let prevCloseData = [];
                     let xDataset = [];
                     let yDataset = [];
@@ -35,12 +41,22 @@ const plotStockChart = (TIMEPERIOD) => {
                         $("#infoerrorbox").slideDown(200).slideUp(2000);
                     }
                     else {
-                        //Fix algo to include sensex colouring
-                        const stock_with_backslash = swap_stock_symbol(stock.replace('{}', '.'));
-                        const stock_direction = $("#watchlist_arrow_"+stock_with_backslash).html();
+                        var stock_direction;
+                        if ($("#stock_info_name").text() == 'SENSEX'){
+                            stock_direction = $("#info_price_box").css('color');
+                            if (stock_direction == 'rgb(178, 34, 34)'){
+                                stock_direction = 'arrow_downward';
+                            }
+                            else if (stock_direction == 'rgb(0, 128, 0)'){
+                                stock_direction = 'arrow_upward';
+                            }
+                        }
+                        else{
+                            const stock_with_backslash = swap_stock_symbol(stock.replace('{}', '.'));
+                            stock_direction = $("#watchlist_arrow_"+stock_with_backslash).html();
+                        }
                         let colorset = 'rgba(100, 149, 237, 1.0)';
                         //Changes the color of the stock based on stock direction for the chart
-                        console.log(stock_with_backslash)
                         if (stock_direction == 'arrow_upward'){
                             colorset = 'rgba(0,128,0,1.0)';
                         }

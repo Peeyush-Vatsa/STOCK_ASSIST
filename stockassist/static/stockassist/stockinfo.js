@@ -253,6 +253,7 @@ $('document').ready(() => {
                     else{
                         colorset = 'rgba(100, 149, 237, 1.0)';
                         let netchange = ydataset[ydataset.length - 1] - prevClose;
+                        const diff = get_difference(prevClose, ydataset[ydataset.length - 1]);
                         let color = "cornflowerblue";
                         if (netchange > 0){
                             color = "green";
@@ -264,6 +265,7 @@ $('document').ready(() => {
                         }
                         $("#info_price_box").css('color', color);
                         $("#info_price").text(((ydataset[ydataset.length - 1]).toFixed(2)).toString());
+                        $("#info_price_netchange").text(diff);
                     }  
                     plotChart(xDataset, ydataset, colorset, prevCloseData);
             }

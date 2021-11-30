@@ -106,5 +106,12 @@ $(document).ready(() => {
             $("#search_info_panel").text("Top Companies");
         }
     });
-    //Add code here
+    try{
+        if ($("#stock_info_name").text() == 'SENSEX'){
+            $(".info_panel").css('height', '700').addClass('py-3');
+        }
+    }
+    catch{
+
+    }
 });

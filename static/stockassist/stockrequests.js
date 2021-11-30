@@ -89,8 +89,8 @@ const initialise_price_display = () => {
 }
 //Starts here
 $('document').ready(()=> {
+    get_open_prices();
     if (!($("#no_stocks_in_watchlist").text())){
-        get_open_prices();
         setTimeout(get_open_prices,5000);
     }
     setInterval(() => {
