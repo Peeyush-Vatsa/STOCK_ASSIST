@@ -38,7 +38,10 @@ const plotStockChart = (TIMEPERIOD) => {
                     }
                     if (xDataset.length < 3){
                         $("#infoerrormessage").html("Unable to plot intraday chart (Error code 11 - Insufficient data)");
-                        $("#infoerrorbox").slideDown(200).slideUp(2000);
+                        $("#infoerrorbox").slideDown(200);
+                        setTimeout(() => {$("#infoerrorbox").slideUp(200)}, 3000);
+                        plotStockChart('6M');
+
                     }
                     else {
                         var stock_direction;
