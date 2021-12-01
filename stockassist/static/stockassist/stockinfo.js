@@ -64,18 +64,17 @@ const updateInfoChart = (time, price) => {
         ! - Pops values on first fetch
     */
     if ($("#1D").attr('class').includes('active') == true){
+        const prevClose = intradayChart.data.datasets[1].data[0];
         if (!(time.endsWith('1') || time.endsWith('6'))){
             //Pops value to ensure its not permanent
             intradayChart.data.labels.pop();
-            intradayChart.data.datasets.forEach((dataset) => {
-                dataset.data.pop();
-            });
+            intradayChart.data.datasets[0].data.pop();
+            intradayChart.data.datasets[1].data.pop();
         }
         //Pushes stock data into stock
         intradayChart.data.labels.push(time);
-        intradayChart.data.datasets.forEach((dataset) => {
-            dataset.data.push(price);
-        });
+        intradayChart.data.datasets[0].data.push(price);
+        intradayChart.data.datasets[1].data.push(prevClose);
         intradayChart.update();
     }
 }
@@ -84,9 +83,7 @@ const updateInfoChartColor = (color) => {
         Changes color of the chart if stock direction changes
      */
     if ($("#1D").attr('class').includes('active') == true){    
-        intradayChart.data.datasets.forEach((dataset) => {
-            dataset.borderColor = color;
-        });
+        intradayChart.data.datasets[0].borderColor = color;
         intradayChart.update();
     }
 }
