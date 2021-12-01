@@ -85,7 +85,13 @@ const plotStockChart = (TIMEPERIOD) => {
                     else if (netDif < 0){
                         colorset = 'rgba(178,34,34,1.0)';
                     }
-                    intradayChart.destroy();
+                    try{
+                        intradayChart.destroy();
+                    }
+                    catch{
+                        plotChart(xDataset, yDataset, colorset);
+                        intradayChart.destroy();
+                    }
                     plotChart(xDataset, yDataset, colorset);
                     $("#infoloadbox").slideUp(500);
                     $("#breakbox").slideUp(500);
