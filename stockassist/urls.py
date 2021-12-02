@@ -16,5 +16,6 @@ urlpatterns = [
     path('ajax/requests/get_opens/', view=views.fetch_open_market_price, name='getOpenPrices'),
     path('ajax/getInfo/', view=views.stock_info_module, name='getInfo'),
     path('ajax/getChartData', view=views.stockChartData, name='getChartData'),
+    path('myportfolio/', view=views.myportfolio, name='myportfolio'),
 
 ]

@@ -178,6 +178,12 @@ def stockChartData(request):
     else:
         error(request, message='Looks like you wandered off')
 
+def myportfolio(request):
+    if request.method == 'GET':
+        pass
+    else:
+        error(request, message='looks like you wandered off')
+
 def add_to_portfolio(request):
     pass
 

@@ -1,0 +1,36 @@
+<html lang="en-us">
+    <head>
+        {%load static%}
+        <meta charset="UTF-8">
+        <meta name="description" content="This website is about helping you manage your portfolio">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{%static 'stockassist/UI.css'%}">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="{%static 'stockassist/UI.js'%}"></script>
+        <title>My portfolio</title>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-sm bg-light">
+            <div class="navbar-nav w-100">
+                <a class="navbar-brand px-3 py-2 flex-fill" href="#"><h2>Stock Assist</h2></a>
+                {%if user.is_authenticated%}
+                    <span class="nav-item px-3 py-2 flex-fill">
+                        <span class="dropdown float-right">
+                            <a href="#" class="nav-link dropdown-toggle" id="userdropdown" data-toggle="dropdown">Welcome, {{user.first_name}}</a>
+                            <div class="dropdown-menu px-1">
+                                {%if watchlist_stocks.0%}
+                                <a href="#" class="dropdown-item mx-1">My watchlist</a>
+                                <div class="dropdown-divider"></div>
+                                {%endif%}
+                                <a href="{%url 'stockassist:logout'%}" class="btn btn-outline-danger btn-block btn-sm">Logout</a>
+                            </div>
+                        </span>
+                    </span>
+                {%endif%}
+            </div>
+        </nav>
+    </body>
+</html>

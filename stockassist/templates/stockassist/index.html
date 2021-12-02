@@ -24,6 +24,10 @@
                         <span class="dropdown float-right">
                             <a href="#" class="nav-link dropdown-toggle" id="userdropdown" data-toggle="dropdown">Welcome, {{user.first_name}}</a>
                             <div class="dropdown-menu px-1">
+                                {%if watchlist_stocks.0%}
+                                <a href="#" class="dropdown-item mx-1">My portfolio</a>
+                                <div class="dropdown-divider"></div>
+                                {%endif%}
                                 <a href="{%url 'stockassist:logout'%}" class="btn btn-outline-danger btn-block btn-sm">Logout</a>
                             </div>
                         </span>
@@ -222,19 +226,6 @@
                                 <li><b>Next Earnings Date: </b><span id="earningsDate"></span></li>
                                 <li><b>Previous Close: </b><span id="pClose"></span></li>
                             </ul>
-                        </div>
-                    </div>
-                    <br>
-                    <!--If invested in stock-->
-                    <button class="btn btn-info ml-4" type="button">Invested in this stock ?</button>
-                    <br>
-                    <br>
-                    <div class="card" style="width: 92%;margin: auto;display: none;">
-                        <div class="card-header">
-                            My return from this stock
-                        </div>
-                        <div class="card-body">
-                            Some data
                         </div>
                     </div>
                     <br>
