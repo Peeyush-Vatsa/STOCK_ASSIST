@@ -180,11 +180,19 @@ def stockChartData(request):
 
 def myportfolio(request):
     if request.method == 'GET':
-        pass
+        if (request.user.is_authenticated):
+            my_stocks = watchlist_stocks_current.objects.filter(watchlist_user = request.user.username)
+            context = {'watchlist_stocks': my_stocks}
+            return render(request, 'stockassist/myportfolio.html', context)
+        else:
+            return redirect('stockassist:authcheck')
     else:
         error(request, message='looks like you wandered off')
 
 def add_to_portfolio(request):
+    pass
+
+def remove_from_portfolio(request):
     pass
 
 def error(request, message=''):

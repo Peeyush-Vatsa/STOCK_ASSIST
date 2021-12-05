@@ -22,7 +22,7 @@
                             <a href="#" class="nav-link dropdown-toggle" id="userdropdown" data-toggle="dropdown">Welcome, {{user.first_name}}</a>
                             <div class="dropdown-menu px-1">
                                 {%if watchlist_stocks.0%}
-                                <a href="#" class="dropdown-item mx-1">My watchlist</a>
+                                <a href="{%url 'stockassist:homepage'%}" class="dropdown-item mx-1">My watchlist</a>
                                 <div class="dropdown-divider"></div>
                                 {%endif%}
                                 <a href="{%url 'stockassist:logout'%}" class="btn btn-outline-danger btn-block btn-sm">Logout</a>
@@ -32,5 +32,8 @@
                 {%endif%}
             </div>
         </nav>
+        <div class="container-fluid">
+            <!--Do later-->
+        </div>
     </body>
 </html>
