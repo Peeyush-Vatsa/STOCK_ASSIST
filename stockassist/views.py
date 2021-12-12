@@ -6,7 +6,7 @@ import django.contrib.auth as auth
 from stockassist.cloudant_connect import fetch_current_prices, fetch_intraday_prices, get_open_prices
 from stockassist.stock_operations import fetch_quote, getHistoricalData, is_market_open
 from .ajax_templates import add_stock_to_db, remove_stock_from_db, search, topStocks, update_price_in_local_db
-from stockassist.models import watchlist_stocks_current
+from stockassist.models import portfolio_profit, watchlist_stocks_current
 
 # Create your views here.
 
@@ -181,8 +181,11 @@ def stockChartData(request):
 def myportfolio(request):
     if request.method == 'GET':
         if (request.user.is_authenticated):
+            current_stock_price = fetch_current_prices()
+            update_price_in_local_db(current_stock_price['prices'], request.user.username)
             my_stocks = watchlist_stocks_current.objects.filter(watchlist_user = request.user.username)
-            context = {'watchlist_stocks': my_stocks}
+            portfolio_stocks = portfolio_profit.objects.filter(watchlist_user = request.user.username)
+            context = {'watchlist_stocks': my_stocks, 'portfolio_stocks': portfolio_stocks}
             return render(request, 'stockassist/myportfolio.html', context)
         else:
             return redirect('stockassist:authcheck')
