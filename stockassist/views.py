@@ -185,6 +185,7 @@ def myportfolio(request):
             update_price_in_local_db(current_stock_price['prices'], request.user.username)
             my_stocks = watchlist_stocks_current.objects.filter(watchlist_user = request.user.username)
             portfolio_stocks = portfolio_profit.objects.filter(watchlist_user = request.user.username)
+            #Modify both dicts to create 1 non redundant dict
             context = {'watchlist_stocks': my_stocks, 'portfolio_stocks': portfolio_stocks}
             return render(request, 'stockassist/myportfolio.html', context)
         else:
@@ -193,7 +194,10 @@ def myportfolio(request):
         error(request, message='looks like you wandered off')
 
 def add_to_portfolio(request):
-    pass
+    if request.method == 'GET':
+        pass
+    else:
+        error(request, message='looks like you wandered off')
 
 def remove_from_portfolio(request):
     pass
